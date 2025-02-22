@@ -1,0 +1,38 @@
+services:
+  modpoll:
+    command: >
+      modpoll
+        --config /app/config/vmi9.csv
+        --daemon
+        --mqtt-host mqtt-broker
+        --mqtt-port 1883
+        --mqtt-publish-topic-pattern {{device_name}}
+        --mqtt-qos 0
+        --mqtt-version 5.0
+        --rate ${MODPOLL_RATE_S}
+        --tcp ${HEAT_PUMP_IP}
+        --tcp-port ${HEAT_PUMP_PORT}
+        --timestamp
+    container_name: modpoll
+    depends_on:
+      - mqtt-broker
+    env_file:
+      - .env
+    image: topmaker/modpoll
+    restart: unless-stopped
+    volumes:
+      - ./modpoll/vmi9.csv:/app/config/vmi9.csv
+
+  mqtt-broker:
+    container_name: emqx
+    env_file:
+      - .env
+    environment:
+      - EMQX_DASHBOARD__DEFAULT_PASSWORD=${EMQX_DASHBOARD__DEFAULT_PASSWORD}
+      - EMQX_DASHBOARD__DEFAULT_USERNAME=${EMQX_DASHBOARD__DEFAULT_USERNAME}
+    image: emqx
+    ports:
+      - "1883:1883"
+      - "8083:8083"
+      - "18083:18083"
+    restart: unless-stopped
