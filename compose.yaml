@@ -1,4 +1,16 @@
 services:
+  database:
+    container_name: database
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USERNAME=${DATABASE_USERNAME}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    image: postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
   modpoll:
     command: >
       modpoll
@@ -35,4 +47,18 @@ services:
       - "1883:1883"
       - "8083:8083"
       - "18083:18083"
+    restart: unless-stopped
+
+  pgadmin:
+    container_name: pgadmin
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
     restart: unless-stopped
