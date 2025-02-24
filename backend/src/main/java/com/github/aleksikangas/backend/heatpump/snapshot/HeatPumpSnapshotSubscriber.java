@@ -4,6 +4,10 @@
 
 package com.github.aleksikangas.backend.heatpump.snapshot;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.net.URI;
@@ -73,10 +77,16 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
   }
 
   @Override
-  public void messageArrived(String topic, MqttMessage message) throws Exception {
+  public void messageArrived(final String topic, final MqttMessage message) throws Exception {
     LOG.debug("MQTT message arrived: Topic={}, Message={}", topic, message);
     if (VMI_9_TOPIC.equals(topic)) {
-      // TODO
+      try {
+        final HeatPumpSnapshot heatPumpSnapshot = new ObjectMapper().readValue(message.getPayload(),
+            HeatPumpSnapshot.class);
+        applicationEventPublisher.publishEvent(new HeatPumpSnapshotEvent(this, heatPumpSnapshot));
+      } catch (final DatabindException | StreamReadException e) {
+        LOG.warn("Failed to deserialize JSON={} as {}", message.getPayload(), HeatPumpSnapshot.class, e);
+      }
     }
   }
 

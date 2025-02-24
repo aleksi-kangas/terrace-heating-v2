@@ -5,6 +5,7 @@
 package com.github.aleksikangas.backend.persistence.core;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,5 +20,6 @@ public abstract class AbstractEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @JsonIgnore
   private long id;
 }
