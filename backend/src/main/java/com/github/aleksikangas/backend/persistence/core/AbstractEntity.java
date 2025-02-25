@@ -13,6 +13,9 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * An abstract base entity offering ID field.
+ */
 @Getter
 @MappedSuperclass
 @Setter

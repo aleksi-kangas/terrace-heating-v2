@@ -19,6 +19,9 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+/**
+ * Core backend application configuration.
+ */
 @ComponentScan(basePackages = {"com.github.aleksikangas.backend.*"})
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.github.aleksikangas.backend.*"})

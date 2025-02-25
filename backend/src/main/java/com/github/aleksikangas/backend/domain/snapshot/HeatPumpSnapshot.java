@@ -17,6 +17,12 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Immutable;
 
+/**
+ * A snapshot of heat-pump state at a point in time.
+ *
+ * @see StorageTankLimitSnapshot
+ * @see TemperatureSnapshot
+ */
 @AllArgsConstructor
 @Entity
 @Immutable

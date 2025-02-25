@@ -13,6 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Immutable;
 
+/**
+ * A snapshot of heat-pump storage tank limits, which guide the heat-pump run operations.
+ *
+ * @see HeatPumpSnapshot
+ */
 @AllArgsConstructor
 @Entity
 @Getter

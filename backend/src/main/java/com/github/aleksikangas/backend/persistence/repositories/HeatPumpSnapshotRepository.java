@@ -8,6 +8,9 @@ import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Repository for {@link HeatPumpSnapshot}s.
+ */
 @Repository
 public interface HeatPumpSnapshotRepository extends JpaRepository<HeatPumpSnapshot, Long> {
 
