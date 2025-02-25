@@ -6,6 +6,8 @@ package com.github.aleksikangas.backend.controller.heatpump;
 
 import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshotRepository;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -47,10 +49,8 @@ public final class HeatPumpSnapshotController {
   }
 
   @GetMapping("days/{days}")
-  public ResponseEntity<List<HeatPumpSnapshot>> listSnapshotsForPreviousDays(@PathVariable final int days) {
-    if (days < 1 || days > 30) {
-      return ResponseEntity.badRequest().build();
-    }
+  public ResponseEntity<List<HeatPumpSnapshot>> listSnapshotsForPreviousDays(
+      @PathVariable @Min(1) @Max(30) final int days) {
     final Instant threshold = Instant.now().minus(days, ChronoUnit.DAYS);
     return ResponseEntity.ok(heatPumpSnapshotRepository.findByTimestampAfterOrderByTimestamp(threshold));
   }
