@@ -14,6 +14,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Immutable;
 
@@ -25,13 +26,14 @@ import org.springframework.data.annotation.Immutable;
  */
 @AllArgsConstructor
 @Entity
+@Getter
 @Immutable
 @NoArgsConstructor
 @Table(name = "heat_pump_snapshots")
 public final class HeatPumpSnapshot extends AbstractEntity {
 
   @Column(nullable = false, updatable = false)
-  private Instant timestampUtc;
+  private Instant timestamp;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   private TemperatureSnapshot temperatureSnapshot;
