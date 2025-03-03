@@ -8,7 +8,7 @@ import com.github.aleksikangas.backend.domain.snapshot.TemperatureSnapshot;
 import com.github.aleksikangas.backend.heatpump.client.registers.RegisterRange;
 import com.github.aleksikangas.backend.heatpump.client.registers.TemperatureRegisters;
 
-public class TemperatureSnapshotParser {
+public final class TemperatureSnapshotParser {
 
   private static final float GAIN = 0.1f;
 

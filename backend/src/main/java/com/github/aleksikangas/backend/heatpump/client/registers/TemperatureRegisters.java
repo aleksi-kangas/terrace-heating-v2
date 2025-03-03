@@ -4,7 +4,7 @@
 
 package com.github.aleksikangas.backend.heatpump.client.registers;
 
-public class TemperatureRegisters {
+public final class TemperatureRegisters {
 
   public static int outdoor = 1;
   public static int hotGas1 = 2;
