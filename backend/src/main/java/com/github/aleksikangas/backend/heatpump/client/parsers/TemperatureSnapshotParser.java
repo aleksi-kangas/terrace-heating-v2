@@ -7,6 +7,7 @@ package com.github.aleksikangas.backend.heatpump.client.parsers;
 import com.github.aleksikangas.backend.domain.snapshot.TemperatureSnapshot;
 import com.github.aleksikangas.backend.heatpump.client.registers.RegisterRange;
 import com.github.aleksikangas.backend.heatpump.client.registers.TemperatureRegisters;
+import com.github.aleksikangas.backend.utils.TemperatureUtils;
 
 public final class TemperatureSnapshotParser {
 
@@ -44,7 +45,7 @@ public final class TemperatureSnapshotParser {
       final int register,
       final short[] registerValues) {
     final int registerOffset = register - registerRange.startRegister();
-    return registerValues[registerOffset] * GAIN;
+    return TemperatureUtils.roundToOneDecimalPlace(registerValues[registerOffset] * GAIN);
   }
 
   private TemperatureSnapshotParser() {

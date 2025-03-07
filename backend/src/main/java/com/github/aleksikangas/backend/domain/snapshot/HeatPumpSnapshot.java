@@ -7,6 +7,7 @@ package com.github.aleksikangas.backend.domain.snapshot;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.aleksikangas.backend.persistence.core.AbstractEntity;
+import com.github.aleksikangas.backend.utils.TemperatureUtils;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -104,28 +105,28 @@ public final class HeatPumpSnapshot extends AbstractEntity {
       @JsonProperty("upper_storage_tank_maximum_adjusted_c") final float upperStorageTankMaximumAdjustedC) {
     this(Instant.ofEpochSecond(timestampEpochS),
         new TemperatureSnapshot(
-            groundCircuitInC,
-            groundCircuitOutC,
-            heatDistributionCircuit1C,
-            heatDistributionCircuit2C,
-            heatDistributionCircuit3C,
-            hotGas1C,
-            hotGas2C,
-            indoorC,
-            outdoorC,
-            lowerStorageTankC,
-            upperStorageTankC),
+            TemperatureUtils.roundToOneDecimalPlace(groundCircuitInC),
+            TemperatureUtils.roundToOneDecimalPlace(groundCircuitOutC),
+            TemperatureUtils.roundToOneDecimalPlace(heatDistributionCircuit1C),
+            TemperatureUtils.roundToOneDecimalPlace(heatDistributionCircuit2C),
+            TemperatureUtils.roundToOneDecimalPlace(heatDistributionCircuit3C),
+            TemperatureUtils.roundToOneDecimalPlace(hotGas1C),
+            TemperatureUtils.roundToOneDecimalPlace(hotGas2C),
+            TemperatureUtils.roundToOneDecimalPlace(indoorC),
+            TemperatureUtils.roundToOneDecimalPlace(outdoorC),
+            TemperatureUtils.roundToOneDecimalPlace(lowerStorageTankC),
+            TemperatureUtils.roundToOneDecimalPlace(upperStorageTankC)),
         new StorageTankLimitSnapshot(
-            lowerStorageTankMinimumC,
-            lowerStorageTankMaximumC,
-            lowerStorageTankMinimumAdjustedC,
-            lowerStorageTankMaximumAdjustedC
+            TemperatureUtils.roundToOneDecimalPlace(lowerStorageTankMinimumC),
+            TemperatureUtils.roundToOneDecimalPlace(lowerStorageTankMaximumC),
+            TemperatureUtils.roundToOneDecimalPlace(lowerStorageTankMinimumAdjustedC),
+            TemperatureUtils.roundToOneDecimalPlace(lowerStorageTankMaximumAdjustedC)
         ),
         new StorageTankLimitSnapshot(
-            upperStorageTankMinimumC,
-            upperStorageTankMaximumC,
-            upperStorageTankMinimumAdjustedC,
-            upperStorageTankMaximumAdjustedC
+            TemperatureUtils.roundToOneDecimalPlace(upperStorageTankMinimumC),
+            TemperatureUtils.roundToOneDecimalPlace(upperStorageTankMaximumC),
+            TemperatureUtils.roundToOneDecimalPlace(upperStorageTankMinimumAdjustedC),
+            TemperatureUtils.roundToOneDecimalPlace(upperStorageTankMaximumAdjustedC)
         ));
   }
 }
