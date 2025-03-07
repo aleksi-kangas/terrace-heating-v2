@@ -5,9 +5,15 @@
 package com.github.aleksikangas.backend.heatpump.client;
 
 import com.github.aleksikangas.backend.domain.snapshot.TemperatureSnapshot;
+import com.github.aleksikangas.backend.domain.timer.TimerSchedule;
+import com.github.aleksikangas.backend.domain.timer.TimerType;
 import com.github.aleksikangas.backend.heatpump.client.parsers.TemperatureSnapshotParser;
+import com.github.aleksikangas.backend.heatpump.client.parsers.TimerScheduleParser;
 import com.github.aleksikangas.backend.heatpump.client.registers.RegisterRange;
 import com.github.aleksikangas.backend.heatpump.client.registers.TemperatureRegisters;
+import com.github.aleksikangas.backend.heatpump.client.registers.TimerRegisters;
+import com.github.aleksikangas.backend.heatpump.client.utils.RegisterUtils;
+import java.util.SortedMap;
 import java.util.concurrent.ExecutionException;
 import net.solarnetwork.io.modbus.ModbusClient;
 import net.solarnetwork.io.modbus.ModbusException;
@@ -51,9 +57,50 @@ public class HeatPumpTcpClient implements HeatPumpClient {
     }
   }
 
-  private short[] readHoldingRegisterRange(final RegisterRange registerRange) {
+  @Override
+  public TimerSchedule readTimerSchedule(final TimerType timerType) throws HeatPumpClientException {
+    try {
+      client.start().get();
+      final TimerRegisters timerRegisters = TimerRegisters.of(timerType);
+      final RegisterRange startEndHourRegisterRange = timerRegisters.getStartEndHourRegisterRange();
+      final RegisterRange temperatureDeltaRegisterRange = timerRegisters.getTemperatureDeltaRegisterRange();
+      final short[] startHourEndHourValues = readHoldingRegisterRange(startEndHourRegisterRange);
+      final short[] temperatureDeltaValues = readHoldingRegisterRange(temperatureDeltaRegisterRange);
+      return TimerScheduleParser.parse(timerType, startHourEndHourValues, temperatureDeltaValues);
+    } catch (final ExecutionException | InterruptedException | ModbusException e) {
+      LOG.error("Failed to read timer schedule", e);
+      throw new HeatPumpClientException(e);
+    } finally {
+      client.stop();
+    }
+  }
+
+  @Override
+  public void writeTimerSchedule(final TimerType timerType, final TimerSchedule timerSchedule)
+      throws HeatPumpClientException {
+    try {
+      client.start().get();
+      final SortedMap<Integer, Short> registerValueMap = RegisterUtils.buildRegisterValueMap(timerType, timerSchedule);
+      RegisterUtils.extractContiguousRegisterValueRanges(registerValueMap)
+          .forEach(vr -> writeHoldingRegisterRange(vr.registerRange(), vr.values()));
+    } catch (final ExecutionException | InterruptedException | ModbusException e) {
+      LOG.error("Failed to write timer schedule", e);
+      throw new HeatPumpClientException(e);
+    } finally {
+      client.stop();
+    }
+  }
+
+  private short[] readHoldingRegisterRange(final RegisterRange registerRange) throws ModbusException {
     final RegistersModbusMessage request = RegistersModbusMessage.readHoldingsRequest(
         UNIT_ID, registerRange.startRegister(), registerRange.registerCount());
     return client.send(request).unwrap(RegistersModbusMessage.class).dataDecode();
+  }
+
+  private void writeHoldingRegisterRange(final RegisterRange registerRange, final short[] registerValues)
+      throws ModbusException {
+    final RegistersModbusMessage request = RegistersModbusMessage.writeHoldingsRequest(
+        UNIT_ID, registerRange.startRegister(), registerValues);
+    client.send(request);
   }
 }
