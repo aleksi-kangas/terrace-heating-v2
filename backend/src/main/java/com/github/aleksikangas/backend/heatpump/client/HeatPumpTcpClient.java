@@ -75,6 +75,17 @@ public class HeatPumpTcpClient implements HeatPumpClient {
     }
   }
 
+  /**
+   * Write the given {@link TimerSchedule} as the current of the given {@link TimerType}.
+   *
+   * @param timerType     of interest
+   * @param timerSchedule to write
+   * @throws HeatPumpClientException on failure
+   * @implNote Implemented as multiple write operations, each writing contiguous address ranges at once. The overall
+   * write operations is not transacted, i.e. may partially fail. If any of the writing operations fails, the overall
+   * operation is not continued, and the resulting state shall equal to the intersection of the original state and the
+   * succeeded write operations.
+   */
   @Override
   public void writeTimerSchedule(final TimerType timerType, final TimerSchedule timerSchedule)
       throws HeatPumpClientException {
@@ -82,7 +93,7 @@ public class HeatPumpTcpClient implements HeatPumpClient {
       client.start().get();
       final SortedMap<Integer, Short> registerValueMap = RegisterUtils.buildRegisterValueMap(timerType, timerSchedule);
       RegisterUtils.extractContiguousRegisterValueRanges(registerValueMap)
-          .forEach(vr -> writeHoldingRegisterRange(vr.registerRange(), vr.values()));
+          .forEach(c -> writeHoldingRegisterRange(c.registerRange(), c.values()));
     } catch (final ExecutionException | InterruptedException | ModbusException e) {
       LOG.error("Failed to write timer schedule", e);
       throw new HeatPumpClientException(e);
