@@ -2,7 +2,7 @@
  * Copyright (c) 2025 Aleksi Kangas.
  */
 
-package com.github.aleksikangas.backend.controller.heatpump;
+package com.github.aleksikangas.backend.controller.heatpump.snapshot;
 
 import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshotRepository;
