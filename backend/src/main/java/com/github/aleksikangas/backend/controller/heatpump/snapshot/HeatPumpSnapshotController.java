@@ -39,7 +39,7 @@ public final class HeatPumpSnapshotController {
   public ResponseEntity<List<HeatPumpSnapshot>> listSnapshotsFromTo(
       @DateTimeFormat(iso = ISO.DATE_TIME) @NotNull @RequestParam final Instant from,
       @DateTimeFormat(iso = ISO.DATE_TIME) @NotNull @RequestParam final Instant to) {
-    if (from.isBefore(to)) {
+    if (from.isAfter(to)) {
       return ResponseEntity.badRequest().build();
     }
     if (from.until(to).toDays() > 30) {
