@@ -51,7 +51,7 @@ const RootLayout = ({children}: Readonly<{ children: React.ReactNode }>) => {
             <UnstyledButton className={classes.control}>Schedules</UnstyledButton>
           </AppShell.Navbar>
           <AppShell.Main>
-            <Container>
+            <Container fluid h="95%">
               {children}
             </Container>
           </AppShell.Main>
