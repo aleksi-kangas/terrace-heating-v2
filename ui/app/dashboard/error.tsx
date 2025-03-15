@@ -1,8 +1,8 @@
 'use client';
 
-import {Alert, Text} from "@mantine/core";
-import {IconWifiOff} from "@tabler/icons-react";
+import {Center} from "@mantine/core";
 import {useEffect} from "react";
+import ErrorNotification from "@/app/components/error-notification";
 
 const Error = ({error}: { error: Error & { digest?: string } }) => {
   useEffect(() => {
@@ -10,9 +10,9 @@ const Error = ({error}: { error: Error & { digest?: string } }) => {
   }, [error]);
 
   return (
-      <Alert variant="filled" color="red" icon={<IconWifiOff/>} title="Error">
-        <Text>Server connection failure</Text>
-      </Alert>
+      <Center h={850}>
+        <ErrorNotification message="Server connection failure"/>
+      </Center>
   )
 }
 
