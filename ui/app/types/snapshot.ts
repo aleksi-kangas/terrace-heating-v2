@@ -1,8 +1,8 @@
 export interface HeatPumpSnapshot {
-  timestamp: number;
-  temperatures: TemperatureSnapshot;
-  lowerStorageTankLimits: StorageTankLimitSnapshot
-  upperStorageTankLimits: StorageTankLimitSnapshot
+  timestamp: string;
+  temperatureSnapshot: TemperatureSnapshot;
+  lowerStorageTankLimitSnapshot: StorageTankLimitSnapshot
+  upperStorageTankLimitSnapshot: StorageTankLimitSnapshot
 }
 
 export interface TemperatureSnapshot {
