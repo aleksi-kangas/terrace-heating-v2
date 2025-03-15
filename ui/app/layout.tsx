@@ -1,5 +1,6 @@
 'use client';
 import '@mantine/core/styles.css';
+import '@mantine/charts/styles.css';
 import {
   AppShell,
   Burger,
