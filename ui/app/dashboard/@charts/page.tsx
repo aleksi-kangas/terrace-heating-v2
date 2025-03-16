@@ -4,12 +4,13 @@ import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots"
 import OutdoorTemperatureChart from "@/app/dashboard/@charts/components/outdoor-temperature-chart";
 
 const ChartsPage = async () => {
-  const heatPumpSnapshots: HeatPumpSnapshot[] = await fetchHeatPumpSnapshotsTrailingDays(2);
+  const trailingDays: number = 2;
+  const heatPumpSnapshots: HeatPumpSnapshot[] = await fetchHeatPumpSnapshotsTrailingDays(trailingDays);
   return (
       <>
-        <OutdoorTemperatureChart heatPumpSnapshots={heatPumpSnapshots}/>
+        <OutdoorTemperatureChart heatPumpSnapshots={heatPumpSnapshots} xAxisDomainTrailingDays={trailingDays}/>
         <Divider my="md"/>
-        <OutdoorTemperatureChart heatPumpSnapshots={heatPumpSnapshots}/>
+        <OutdoorTemperatureChart heatPumpSnapshots={heatPumpSnapshots} xAxisDomainTrailingDays={trailingDays}/>
       </>
   )
 }
