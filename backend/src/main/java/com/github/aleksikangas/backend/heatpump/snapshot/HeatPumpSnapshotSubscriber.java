@@ -4,9 +4,6 @@
 
 package com.github.aleksikangas.backend.heatpump.snapshot;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.databind.DatabindException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -27,6 +24,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import tools.jackson.core.exc.StreamReadException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Subscribes to <code>VMi 9</code> topic on the MQTT broker. Publishes {@link HeatPumpSnapshotEvent}s upon subscription
@@ -39,8 +39,11 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
 
   private static final UUID CLIENT_ID = UUID.randomUUID();
   private static final MqttConnectionOptions CONNECTION_OPTIONS = new MqttConnectionOptions();
+  private static final JsonMapper JSON_MAPPER = new JsonMapper();
   private static final int QOS_0 = 0;
-  private static final URI SERVER_URI = URI.create(System.getenv("MQTT_BROKER_URI"));
+  private static final URI SERVER_URI = URI.create(String.format("tcp://%s:%d",
+      System.getenv("MQTT_BROKER_ADDRESS"),
+      Integer.parseInt(System.getenv("MQTT_BROKER_PORT"))));
   private static final String VMI_9_TOPIC = "VMi 9";
 
   private final IMqttClient mqttClient = new MqttClient(
@@ -81,11 +84,10 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
     LOG.debug("MQTT message arrived: Topic={}, Message={}", topic, message);
     if (VMI_9_TOPIC.equals(topic)) {
       try {
-        final HeatPumpSnapshot heatPumpSnapshot = new ObjectMapper().readValue(message.getPayload(),
-            HeatPumpSnapshot.class);
+        final HeatPumpSnapshot heatPumpSnapshot = JSON_MAPPER.readValue(message.toString(), HeatPumpSnapshot.class);
         applicationEventPublisher.publishEvent(new HeatPumpSnapshotEvent(this, heatPumpSnapshot));
       } catch (final DatabindException | StreamReadException e) {
-        LOG.warn("Failed to deserialize JSON={} as {}", message.getPayload(), HeatPumpSnapshot.class, e);
+        LOG.warn("Failed to deserialize JSON={} as {}", message, HeatPumpSnapshot.class, e);
       }
     }
   }

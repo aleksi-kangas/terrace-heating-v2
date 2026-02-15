@@ -9,6 +9,7 @@ import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshot
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -42,7 +43,7 @@ public final class HeatPumpSnapshotController {
     if (from.isAfter(to)) {
       return ResponseEntity.badRequest().build();
     }
-    if (from.until(to).toDays() > 30) {
+    if (Duration.between(from, to).toDays() > 30) {
       return ResponseEntity.badRequest().build();
     }
     return ResponseEntity.ok(heatPumpSnapshotRepository.findByTimestampBetweenOrderByTimestamp(from, to));

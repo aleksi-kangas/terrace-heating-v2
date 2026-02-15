@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import java.io.Serializable;
 
 /**
  * An abstract base entity offering ID field.
@@ -19,7 +20,7 @@ import lombok.Setter;
 @Getter
 @MappedSuperclass
 @Setter
-public abstract class AbstractEntity {
+public abstract class AbstractEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

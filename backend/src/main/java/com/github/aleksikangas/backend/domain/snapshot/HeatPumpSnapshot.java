@@ -76,33 +76,33 @@ public final class HeatPumpSnapshot extends AbstractEntity {
       @JsonProperty("timestamp") final long timestampEpochS,
 
       // TemperatureSnapshot
-      @JsonProperty("ground_circuit_in_c") final float groundCircuitInC,
-      @JsonProperty("ground_circuit_out_c") final float groundCircuitOutC,
+      @JsonProperty("ground_circuit_in|C") final float groundCircuitInC,
+      @JsonProperty("ground_circuit_out|C") final float groundCircuitOutC,
 
-      @JsonProperty("heat_distribution_circuit_1_c") final float heatDistributionCircuit1C,
-      @JsonProperty("heat_distribution_circuit_2_c") final float heatDistributionCircuit2C,
-      @JsonProperty("heat_distribution_circuit_3_c") final float heatDistributionCircuit3C,
+      @JsonProperty("heat_distribution_circuit_1|C") final float heatDistributionCircuit1C,
+      @JsonProperty("heat_distribution_circuit_2|C") final float heatDistributionCircuit2C,
+      @JsonProperty("heat_distribution_circuit_3|C") final float heatDistributionCircuit3C,
 
-      @JsonProperty("hot_gas_1_c") final float hotGas1C,
-      @JsonProperty("hot_gas_2_c") final float hotGas2C,
+      @JsonProperty("hot_gas_1|C") final float hotGas1C,
+      @JsonProperty("hot_gas_2|C") final float hotGas2C,
 
-      @JsonProperty("indoor_c") final float indoorC,
-      @JsonProperty("outdoor_c") final float outdoorC,
+      @JsonProperty("indoor|C") final float indoorC,
+      @JsonProperty("outdoor|C") final float outdoorC,
 
-      @JsonProperty("lower_storage_tank_c") final float lowerStorageTankC,
-      @JsonProperty("upper_storage_tank_c") final float upperStorageTankC,
+      @JsonProperty("lower_storage_tank|C") final float lowerStorageTankC,
+      @JsonProperty("upper_storage_tank|C") final float upperStorageTankC,
 
       // Lower StorageTankLimitSnapshot
-      @JsonProperty("lower_storage_tank_minimum_c") final float lowerStorageTankMinimumC,
-      @JsonProperty("lower_storage_tank_maximum_c") final float lowerStorageTankMaximumC,
-      @JsonProperty("lower_storage_tank_minimum_adjusted_c") final float lowerStorageTankMinimumAdjustedC,
-      @JsonProperty("lower_storage_tank_maximum_adjusted_c") final float lowerStorageTankMaximumAdjustedC,
+      @JsonProperty("lower_storage_tank_minimum|C") final float lowerStorageTankMinimumC,
+      @JsonProperty("lower_storage_tank_maximum|C") final float lowerStorageTankMaximumC,
+      @JsonProperty("lower_storage_tank_minimum_adjusted|C") final float lowerStorageTankMinimumAdjustedC,
+      @JsonProperty("lower_storage_tank_maximum_adjusted|C") final float lowerStorageTankMaximumAdjustedC,
 
       // Upper StorageTankLimitSnapshot
-      @JsonProperty("upper_storage_tank_minimum_c") final float upperStorageTankMinimumC,
-      @JsonProperty("upper_storage_tank_maximum_c") final float upperStorageTankMaximumC,
-      @JsonProperty("upper_storage_tank_minimum_adjusted_c") final float upperStorageTankMinimumAdjustedC,
-      @JsonProperty("upper_storage_tank_maximum_adjusted_c") final float upperStorageTankMaximumAdjustedC) {
+      @JsonProperty("upper_storage_tank_minimum|C") final float upperStorageTankMinimumC,
+      @JsonProperty("upper_storage_tank_maximum|C") final float upperStorageTankMaximumC,
+      @JsonProperty("upper_storage_tank_minimum_adjusted|C") final float upperStorageTankMinimumAdjustedC,
+      @JsonProperty("upper_storage_tank_maximum_adjusted|C") final float upperStorageTankMaximumAdjustedC) {
     this(Instant.ofEpochSecond(timestampEpochS),
         new TemperatureSnapshot(
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitInC),

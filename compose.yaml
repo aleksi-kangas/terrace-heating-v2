@@ -1,9 +1,23 @@
 services:
+  backend:
+    build:
+      context: backend
+    container_name: backend
+    depends_on:
+      - database
+      - mqtt-broker
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
   database:
     container_name: database
     env_file:
       - .env
     environment:
+      - POSTGRES_DB=${DATABASE_NAME}
       - POSTGRES_USERNAME=${DATABASE_USERNAME}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     image: postgres

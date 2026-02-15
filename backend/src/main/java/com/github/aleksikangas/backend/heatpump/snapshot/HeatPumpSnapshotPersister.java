@@ -18,7 +18,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public final class HeatPumpSnapshotPersister {
-
   private static final Logger LOG = LoggerFactory.getLogger(HeatPumpSnapshotPersister.class);
 
   private final HeatPumpSnapshotRepository heatPumpSnapshotRepository;
