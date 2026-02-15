@@ -31,5 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: "Prepare environment for validation"
+        run: "cp .env.example .env"
+
       - name: "Validate Docker Compose File"
         run: "docker compose config"
