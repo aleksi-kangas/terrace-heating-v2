@@ -1,0 +1,34 @@
+name: Terrace Heating
+
+on:
+  push:
+    branches: [ "master" ]
+    tags:
+      - "v*.*.*"
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: "Setup JDK"
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: "Build with Maven"
+        run: "mvn clean install"
+
+  docker-check:
+    runs-on: "ubuntu-latest"
+    needs: [ backend ]
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: "Validate Docker Compose File"
+        run: "docker compose config"
