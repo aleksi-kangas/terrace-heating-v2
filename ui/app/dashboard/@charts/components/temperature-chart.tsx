@@ -4,12 +4,16 @@ import {ChartTooltip, LineChart} from "@mantine/charts";
 import {DateTime} from "luxon";
 import {useMemo} from "react";
 
-interface OutdoorTemperatureChartProps {
+interface TemperatureChartProps {
   heatPumpSnapshots: HeatPumpSnapshot[];
   xAxisDomainTrailingDays: number;
+  series: {
+    name: string;
+    label: string;
+  }
 }
 
-const OutdoorTemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays}: OutdoorTemperatureChartProps) => {
+const TemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays, series}: TemperatureChartProps) => {
   const data = useMemo(() => heatPumpSnapshots.map(heatPumpSnapshot => ({
     ...heatPumpSnapshot,
     timestamp: DateTime.fromISO(heatPumpSnapshot.timestamp).toSeconds(),
@@ -23,13 +27,13 @@ const OutdoorTemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays}: O
           data={data}
           dataKey="timestamp"
           h={400}
-          series={series}
+          series={[series]}
           tooltipProps={{
             content: ({label, payload}) =>
                 <ChartTooltip
                     label={tooltipLabelFormatter(label)}
                     payload={payload}
-                    series={series}
+                    series={[series]}
                 />
           }}
           unit="°C"
@@ -48,12 +52,7 @@ const OutdoorTemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays}: O
   )
 }
 
-export default OutdoorTemperatureChart;
-
-const series = [{
-  name: "temperatureSnapshot.outdoorC",
-  label: "Outdoor",
-}];
+export default TemperatureChart;
 
 const tickLabelFormatter = (epochSeconds: number) => DateTime
     .fromSeconds(epochSeconds)
