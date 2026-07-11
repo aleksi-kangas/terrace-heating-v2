@@ -37,6 +37,8 @@ public final class HeatPumpSnapshot extends AbstractEntity {
   private Instant timestamp;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  private CompressorSnapshot compressorSnapshot;
+  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   private TemperatureSnapshot temperatureSnapshot;
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   private StorageTankLimitSnapshot lowerStorageTankLimitSnapshot;
@@ -47,6 +49,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
    * JSON-constructor from MQTT-broker subscription.
    *
    * @param timestampEpochS                  timestamp of the snapshot as seconds from epoch
+   * @param isCompressorActive               whether the compressor is active or not
    * @param groundCircuitInC                 temperature of the ground circuit input, in Celsius
    * @param groundCircuitOutC                temperature of the ground circuit output, in Celsius
    * @param heatDistributionCircuit1C        temperature of the heat distribution circuit 1, in Celsius
@@ -74,6 +77,9 @@ public final class HeatPumpSnapshot extends AbstractEntity {
   @JsonCreator
   public HeatPumpSnapshot(
       @JsonProperty("timestamp") final long timestampEpochS,
+
+      // CompressorSnapshot
+      @JsonProperty("compressor_active") final boolean isCompressorActive,
 
       // TemperatureSnapshot
       @JsonProperty("ground_circuit_in|C") final float groundCircuitInC,
@@ -104,6 +110,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
       @JsonProperty("upper_storage_tank_minimum_adjusted|C") final float upperStorageTankMinimumAdjustedC,
       @JsonProperty("upper_storage_tank_maximum_adjusted|C") final float upperStorageTankMaximumAdjustedC) {
     this(Instant.ofEpochSecond(timestampEpochS),
+        new CompressorSnapshot(isCompressorActive),
         new TemperatureSnapshot(
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitInC),
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitOutC),

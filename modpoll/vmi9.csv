@@ -20,3 +20,6 @@ ref,upper_storage_tank_maximum_adjusted,80,int16,r,C,1
 ref,ground_circuit_out,98,int16,r,C,0.1
 ref,ground_circuit_in,99,int16,r,C,0.1
 ref,heat_distribution_circuit_3,117,int16,r,C,0.1
+,,,,,,
+poll,holding_register,5158,1,BE_BE
+ref,compressor_active,5158:15,bool,r
