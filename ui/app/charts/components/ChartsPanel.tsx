@@ -12,7 +12,7 @@ import {
 
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
-import {Box, Card, Paper, Stack} from "@mantine/core";
+import {Card, Stack} from "@mantine/core";
 
 const availableCharts = [
   {label: "External", value: "external"},
