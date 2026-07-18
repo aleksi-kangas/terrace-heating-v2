@@ -5,17 +5,17 @@ export const chartRegistry = {
     component: GenericTemperatureChart,
     series: [
       {
-        name: "temperatureSnapshot.outdoorC",
+        name: "outdoorC",
         label: "Outdoor °C",
         color: "blue"
       },
       {
-        name: "temperatureSnapshot.groundCircuitInC",
+        name: "groundCircuitInC",
         label: "Ground Circuit - Input °C",
         color: "orange"
       },
       {
-        name: "temperatureSnapshot.groundCircuitOutC",
+        name: "groundCircuitOutC",
         label: "Ground Circuit - Output °C",
         color: "red"
       },
@@ -26,17 +26,17 @@ export const chartRegistry = {
     component: GenericTemperatureChart,
     series: [
       {
-        name: "temperatureSnapshot.upperStorageTankC",
+        name: "upperStorageTankC",
         label: "Top Tank °C",
         color: "orange"
       },
       {
-        name: "temperatureSnapshot.lowerStorageTankC",
+        name: "lowerStorageTankC",
         label: "Lower Tank °C",
         color: "blue"
       },
       {
-        name: "temperatureSnapshot.hotGas1C",
+        name: "hotGas1C",
         label: "Hot Gas 1 °C",
         color: "red"
       },
@@ -47,22 +47,22 @@ export const chartRegistry = {
     component: GenericTemperatureChart,
     series: [
       {
-        name: "temperatureSnapshot.heatDistributionCircuit1C",
+        name: "heatDistributionCircuit1C",
         label: "Circuit 1 °C",
         color: "blue"
       },
       {
-        name: "temperatureSnapshot.heatDistributionCircuit2C",
+        name: "heatDistributionCircuit2C",
         label: "Circuit 2 °C",
         color: "orange"
       },
       {
-        name: "temperatureSnapshot.heatDistributionCircuit3C",
+        name: "heatDistributionCircuit3C",
         label: "Circuit 3 °C",
         color: "red"
       },
       {
-        name: "temperatureSnapshot.indoorC",
+        name: "indoorC",
         label: "Indoor °C",
         color: "green"
       },

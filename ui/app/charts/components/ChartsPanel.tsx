@@ -10,9 +10,10 @@ import {
   ChartSelection as ChartSelectionType,
 } from "./chart-registry";
 
-import {HeatPumpSnapshot} from "@/app/types/snapshot";
+import {HeatPumpSnapshot, TemperatureSnapshot} from "@/app/types/snapshot";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
 import {Card, Stack} from "@mantine/core";
+import {DateTime} from "luxon";
 
 const availableCharts = [
   {label: "External", value: "external"},
@@ -62,6 +63,9 @@ const ChartsPanel = ({initialHeatPumpSnapshots}: Props) => {
 
   const SelectedChart = selectedChart.component;
 
+  const timestamps: DateTime[] = heatPumpSnapshots.map(heatPumpSnapshot => DateTime.fromISO(heatPumpSnapshot.timestamp))
+  const temperatureSnapshots: TemperatureSnapshot[] = heatPumpSnapshots.map(heatPumpSnapshot => heatPumpSnapshot.temperatureSnapshot);
+
   return (
       <Stack h="100%">
         <ChartSelection
@@ -71,7 +75,8 @@ const ChartsPanel = ({initialHeatPumpSnapshots}: Props) => {
         />
         <Card radius="md" shadow="sm" withBorder style={{ flex: 1, minHeight: 0 }}>
           <SelectedChart
-              heatPumpSnapshots={heatPumpSnapshots}
+              timestamps={timestamps}
+              temperatureSnapshots={temperatureSnapshots}
               xAxisDomainTrailingDays={Number(daysSelection)}
               series={selectedChart.series}
           />
