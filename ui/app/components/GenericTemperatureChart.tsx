@@ -1,19 +1,21 @@
-'use client'
-import {HeatPumpSnapshot} from "@/app/types/snapshot";
-import {ChartTooltip, LineChart} from "@mantine/charts";
-import {DateTime} from "luxon";
-import {useMemo} from "react";
+'use client';
 
-interface TemperatureChartProps {
+import {useMemo} from "react";
+import {DateTime} from "luxon";
+import {LineChart, ChartTooltip} from "@mantine/charts";
+import {HeatPumpSnapshot} from "@/app/types/snapshot";
+
+interface GenericTemperatureChartProps {
   heatPumpSnapshots: HeatPumpSnapshot[];
   xAxisDomainTrailingDays: number;
   series: {
     name: string;
     label: string;
-  }
+    color: string;
+  }[];
 }
 
-const TemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays, series}: TemperatureChartProps) => {
+const GenericTemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays, series}: GenericTemperatureChartProps) => {
   const data = useMemo(() => heatPumpSnapshots.map(heatPumpSnapshot => ({
     ...heatPumpSnapshot,
     timestamp: DateTime.fromISO(heatPumpSnapshot.timestamp).toSeconds(),
@@ -26,14 +28,14 @@ const TemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays, series}: 
       <LineChart
           data={data}
           dataKey="timestamp"
-          h={400}
-          series={[series]}
+          h="100%"
+          series={series}
           tooltipProps={{
             content: ({label, payload}) =>
                 <ChartTooltip
                     label={tooltipLabelFormatter(label)}
                     payload={payload}
-                    series={[series]}
+                    series={series}
                 />
           }}
           unit="°C"
@@ -52,7 +54,7 @@ const TemperatureChart = ({heatPumpSnapshots, xAxisDomainTrailingDays, series}: 
   )
 }
 
-export default TemperatureChart;
+export default GenericTemperatureChart;
 
 const tickLabelFormatter = (epochSeconds: number) => DateTime
     .fromSeconds(epochSeconds)
@@ -63,9 +65,10 @@ const tickLabelFormatter = (epochSeconds: number) => DateTime
       minute: '2-digit',
       hourCycle: "h24",
     });
-const tooltipLabelFormatter = (epochSeconds?: number) => {
-  if (epochSeconds === undefined)
-    return "";
+const tooltipLabelFormatter = (value?: number | string) => {
+  if (value == null) return "";
+  const epochSeconds = typeof value === "string" ? Number(value) : value;
+  if (Number.isNaN(epochSeconds)) return "";
   return DateTime
       .fromSeconds(epochSeconds)
       .toLocaleString({

@@ -26,7 +26,7 @@ const RootLayout = ({children}: Readonly<{ children: React.ReactNode }>) => {
           <AppShellHeader>
             <Navbar/>
           </AppShellHeader>
-          <AppShellMain>
+          <AppShellMain h="100vh">
             <Container fluid h="95%">
               {children}
             </Container>
