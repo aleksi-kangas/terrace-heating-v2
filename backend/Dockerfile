@@ -2,7 +2,7 @@ FROM eclipse-temurin:25 AS BUILD
 WORKDIR /app
 COPY .mvn/ .mvn
 COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
+RUN ./mvnw -B -ntp dependency:go-offline
 COPY src ./src
 RUN ./mvnw -B -ntp clean package
 
