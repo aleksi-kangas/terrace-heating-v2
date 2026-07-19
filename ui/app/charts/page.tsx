@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import ChartsPanel from "@/app/charts/components/ChartsPanel";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
