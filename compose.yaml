@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
     ports:
-      - "8080:8080"
+      - "${BACKEND_PORT}:8080"
     restart: unless-stopped
 
   database:
@@ -22,7 +22,7 @@ services:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     image: postgres
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:5432"
     restart: unless-stopped
     volumes:
       - postgres_data:/var/lib/postgresql
@@ -56,13 +56,13 @@ services:
     env_file:
       - .env
     environment:
-      - EMQX_DASHBOARD__DEFAULT_PASSWORD=${EMQX_DASHBOARD__DEFAULT_PASSWORD}
-      - EMQX_DASHBOARD__DEFAULT_USERNAME=${EMQX_DASHBOARD__DEFAULT_USERNAME}
+      - EMQX_DASHBOARD__DEFAULT_PASSWORD=${EMQX_DASHBOARD_DEFAULT_PASSWORD}
+      - EMQX_DASHBOARD__DEFAULT_USERNAME=${EMQX_DASHBOARD_DEFAULT_USERNAME}
     image: emqx
     ports:
-      - "1883:1883"
-      - "8083:8083"
-      - "18083:18083"
+      - "${MQTT_BROKER_PORT}:1883"
+      - "${MQTT_BROKER_TLS_PORT}:8083"
+      - "${EMQX_DASHBOARD_PORT}:18083"
     restart: unless-stopped
 
   pgadmin:
@@ -76,7 +76,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
     image: dpage/pgadmin4
     ports:
-      - "5050:80"
+      - "${PGADMIN_PORT}:80"
     restart: unless-stopped
     volumes:
       - pgadmin_data:/var/lib/pgadmin
@@ -90,8 +90,10 @@ services:
     env_file:
       - .env
     ports:
-      - "3000:3000"
+      - "${UI_PORT}:3000"
     restart: unless-stopped
+    volumes:
+      - ./.env:/app/.env
 
 volumes:
   pgadmin_data:
