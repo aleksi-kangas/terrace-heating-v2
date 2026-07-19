@@ -11,7 +11,7 @@ interface NavbarItemProps {
     label: string;
 }
 
-const NavbarItem = ({active, href, label}: NavbarItemProps) => {
+const NavBarItem = ({active, href, label}: NavbarItemProps) => {
     return (
         <Link href={href}>
             <Button fw={500} size="compact-md" variant={active ? "default" : "subtle"}>
@@ -21,7 +21,7 @@ const NavbarItem = ({active, href, label}: NavbarItemProps) => {
     )
 }
 
-const Navbar = () => {
+const NavBar = () => {
     const pathname = usePathname();
 
     const navbarItems = [
@@ -44,7 +44,7 @@ const Navbar = () => {
             <IconTemperature size={30}/>
             <Group gap={10}>
                 {navbarItems.map((item) => (
-                    <NavbarItem key={item.href}
+                    <NavBarItem key={item.href}
                                 active={pathname.startsWith(item.href)}
                                 href={item.href}
                                 label={item.label}/>
@@ -54,4 +54,4 @@ const Navbar = () => {
     )
 }
 
-export default Navbar;
+export default NavBar;
