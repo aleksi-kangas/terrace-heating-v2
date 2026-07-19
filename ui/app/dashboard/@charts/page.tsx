@@ -3,7 +3,7 @@ import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
 import GenericTemperatureChart from "@/app/components/GenericTemperatureChart";
 
-const ChartsPage = async () => {
+const DashboardChartsPage = async () => {
   const trailingDays: number = 2;
   const heatPumpSnapshots: HeatPumpSnapshot[] = await fetchHeatPumpSnapshotsTrailingDays(trailingDays);
   return (
@@ -17,7 +17,7 @@ const ChartsPage = async () => {
   )
 }
 
-export default ChartsPage;
+export default DashboardChartsPage;
 
 const indoorSeries = {
   name: "indoorC",

@@ -1,14 +1,17 @@
-import {Suspense} from "react";
-import {Divider, Text} from "@mantine/core";
+import {Center, Divider, Loader} from "@mantine/core";
 
-const ControlPage = async () => {
+const DashboardControlPage = async () => {
   return (
-      <Suspense>
-        <Text>TODO1</Text>
+      <>
+        <Center h="100%">
+          <Loader/>
+        </Center>
         <Divider my="md"/>
-        <Text>TODO2</Text>
-      </Suspense>
+        <Center h="100%">
+          <Loader/>
+        </Center>
+      </>
   )
 }
 
-export default ControlPage;
+export default DashboardControlPage;

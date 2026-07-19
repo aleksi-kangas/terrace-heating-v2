@@ -1,6 +1,6 @@
 import {Center, Divider, Loader} from "@mantine/core";
 
-const LoadingDashboardGraphsPage = () => {
+const LoadingDashboardControlPage = () => {
   return (
       <>
         <Center h="100%">
@@ -14,4 +14,4 @@ const LoadingDashboardGraphsPage = () => {
   )
 }
 
-export default LoadingDashboardGraphsPage;
+export default LoadingDashboardControlPage;
