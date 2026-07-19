@@ -2,8 +2,9 @@
 
 import {useMemo} from "react";
 import {DateTime} from "luxon";
-import {LineChart, ChartTooltip} from "@mantine/charts";
+import {ChartTooltip, LineChart} from "@mantine/charts";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
+import {Box} from "@mantine/core";
 
 interface GenericTemperatureChartProps {
   heatPumpSnapshots: HeatPumpSnapshot[]
@@ -32,32 +33,34 @@ const GenericTemperatureChart = ({
     return [now.minus({days: xAxisDomainTrailingDays}).toSeconds(), now.toSeconds()]
   }, [xAxisDomainTrailingDays]);
   return (
-      <LineChart
-          data={data}
-          dataKey="timestamp"
-          h="100%"
-          series={series}
-          tooltipProps={{
-            content: ({label, payload}) =>
-                <ChartTooltip
-                    label={tooltipLabelFormatter(label)}
-                    payload={payload}
-                    series={series}
-                />
-          }}
-          unit="°C"
-          withDots={false}
-          withLegend={true}
-          withTooltip={true}
-          xAxisProps={{
-            angle: -60,
-            axisLine: false,
-            domain: xAxisDomain,
-            height: 50,
-            tickFormatter: tickLabelFormatter,
-            type: "number"
-          }}
-      />
+      <Box h="100%" p="md">
+        <LineChart
+            data={data}
+            dataKey="timestamp"
+            h="100%"
+            series={series}
+            tooltipProps={{
+              content: ({label, payload}) =>
+                  <ChartTooltip
+                      label={tooltipLabelFormatter(label)}
+                      payload={payload}
+                      series={series}
+                  />
+            }}
+            unit="°C"
+            withDots={false}
+            withLegend={true}
+            withTooltip={true}
+            xAxisProps={{
+              angle: -60,
+              axisLine: false,
+              domain: xAxisDomain,
+              height: 50,
+              tickFormatter: tickLabelFormatter,
+              type: "number"
+            }}
+        />
+      </Box>
   )
 }
 

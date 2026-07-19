@@ -2,7 +2,7 @@
 
 import {Center} from "@mantine/core";
 import {useEffect} from "react";
-import ErrorNotification from "@/app/components/error-notification";
+import ErrorNotification from "@/app/components/ErrorNotification";
 
 const Error = ({error}: { error: Error & { digest?: string } }) => {
   useEffect(() => {

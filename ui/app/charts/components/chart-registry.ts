@@ -43,7 +43,7 @@ export const chartRegistry = {
     ],
   },
 
-  heatDistributionCircuits: {
+  circuits: {
     component: GenericTemperatureChart,
     series: [
       {

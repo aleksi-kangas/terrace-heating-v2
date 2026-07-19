@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type {Metadata} from 'next';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import '@mantine/notifications/styles.css';
@@ -12,7 +12,7 @@ import {
   MantineProvider
 } from '@mantine/core';
 import React from "react";
-import Navbar from './components/navbar';
+import NavBar from './components/NavBar';
 
 export const metadata: Metadata = {
   title: "Terrace Heating"
@@ -26,9 +26,9 @@ const RootLayout = ({children}: Readonly<{ children: React.ReactNode }>) => {
       </head>
       <body>
       <MantineProvider>
-        <AppShell header={{height: 60}} padding="md">
+        <AppShell header={{height: 60}} padding={{base: "xs", sm: "sm"}}>
           <AppShellHeader>
-            <Navbar/>
+            <NavBar/>
           </AppShellHeader>
           <AppShellMain>
             <Container fluid h="calc(100vh - 60px - var(--mantine-spacing-md) * 2)">

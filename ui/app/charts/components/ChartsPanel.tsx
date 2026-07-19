@@ -5,10 +5,7 @@ import {useState} from "react";
 import ChartSelection from "./ChartSelection";
 import DaysSelection from "./DaysSelection";
 
-import {
-  chartRegistry,
-  ChartSelection as ChartSelectionType,
-} from "./chart-registry";
+import {chartRegistry, ChartSelection as ChartSelectionType,} from "./chart-registry";
 
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {Card, Stack} from "@mantine/core";
@@ -17,10 +14,7 @@ import {usePathname, useRouter} from "next/navigation";
 const availableCharts = [
   {label: "External", value: "external"},
   {label: "Tanks", value: "tanks"},
-  {
-    label: "Heat Distribution Circuits",
-    value: "heatDistributionCircuits",
-  },
+  {label: "Circuits", value: "circuits"},
 ];
 
 const availableDays = [
