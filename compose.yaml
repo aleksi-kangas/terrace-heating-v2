@@ -81,6 +81,18 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
+  ui:
+    build:
+      context: ui
+    container_name: ui
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
 volumes:
   pgadmin_data:
   postgres_data:
