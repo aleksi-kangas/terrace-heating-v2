@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Immutable;
 
 /**
- * A snapshot of heat-pump compressor.
+ * A snapshot of heat-pump control state.
  *
  * @see HeatPumpSnapshot
  */
@@ -19,9 +19,11 @@ import org.springframework.data.annotation.Immutable;
 @Getter
 @Immutable
 @NoArgsConstructor
-@Table(name = "compressor_snapshots")
-public final class CompressorSnapshot extends AbstractEntity {
+@Table(name = "control_snapshots")
+public final class ControlSnapshot extends AbstractEntity {
 
   @Column(updatable = false)
-  private boolean isActive;
+  private int activeHeatDistributionCircuitCount;
+  @Column(updatable = false)
+  private boolean isCompressorActive;
 }

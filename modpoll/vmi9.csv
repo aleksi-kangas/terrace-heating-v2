@@ -21,5 +21,6 @@ ref,ground_circuit_out,98,int16,r,C,0.1
 ref,ground_circuit_in,99,int16,r,C,0.1
 ref,heat_distribution_circuit_3,117,int16,r,C,0.1
 ,,,,,,
-poll,holding_register,5158,1,BE_BE
+poll,holding_register,5100,59,BE_BE
+ref,active_heat_distribution_circuit_count,5100,int16,r
 ref,compressor_active,5158:0,bool,r

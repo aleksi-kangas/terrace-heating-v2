@@ -37,7 +37,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
   private Instant timestamp;
 
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-  private CompressorSnapshot compressorSnapshot;
+  private ControlSnapshot controlSnapshot;
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
   private TemperatureSnapshot temperatureSnapshot;
   @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,37 +48,39 @@ public final class HeatPumpSnapshot extends AbstractEntity {
   /**
    * JSON-constructor from MQTT-broker subscription.
    *
-   * @param timestampEpochS                  timestamp of the snapshot as seconds from epoch
-   * @param isCompressorActive               whether the compressor is active or not
-   * @param groundCircuitInC                 temperature of the ground circuit input, in Celsius
-   * @param groundCircuitOutC                temperature of the ground circuit output, in Celsius
-   * @param heatDistributionCircuit1C        temperature of the heat distribution circuit 1, in Celsius
-   * @param heatDistributionCircuit2C        temperature of the heat distribution circuit 2, in Celsius
-   * @param heatDistributionCircuit3C        temperature of the heat distribution circuit 3, in Celsius
-   * @param hotGas1C                         temperature of the hot gas 1, in Celsius
-   * @param hotGas2C                         temperature of the hot gas 2, in Celsius
-   * @param indoorC                          indoor temperature, in Celsius
-   * @param outdoorC                         outdoor temperature, in Celsius
-   * @param lowerStorageTankC                temperature of the lower storage tank, in Celsius
-   * @param upperStorageTankC                temperature of the upper storage tank, in Celsius
-   * @param lowerStorageTankMinimumC         minimum threshold value of the lower storage tank
-   * @param lowerStorageTankMaximumC         maximum threshold value of the lower storage tank
-   * @param lowerStorageTankMinimumAdjustedC adjusted (= corrections applied) minimum threshold value of the lower
-   *                                         storage tank
-   * @param lowerStorageTankMaximumAdjustedC adjusted (= corrections applied) maximum threshold value of the lower
-   *                                         storage tank
-   * @param upperStorageTankMinimumC         minimum threshold value of the upper storage tank
-   * @param upperStorageTankMaximumC         maximum threshold value of the upper storage tank
-   * @param upperStorageTankMinimumAdjustedC adjusted (= corrections applied) minimum threshold value of the upper
-   *                                         storage tank
-   * @param upperStorageTankMaximumAdjustedC adjusted (= corrections applied) maximum threshold value of the upper
-   *                                         storage tank
+   * @param timestampEpochS                    timestamp of the snapshot as seconds from epoch
+   * @param activeHeatDistributionCircuitCount the number of active heat distribution circuits
+   * @param isCompressorActive                 whether the compressor is active or not
+   * @param groundCircuitInC                   temperature of the ground circuit input, in Celsius
+   * @param groundCircuitOutC                  temperature of the ground circuit output, in Celsius
+   * @param heatDistributionCircuit1C          temperature of the heat distribution circuit 1, in Celsius
+   * @param heatDistributionCircuit2C          temperature of the heat distribution circuit 2, in Celsius
+   * @param heatDistributionCircuit3C          temperature of the heat distribution circuit 3, in Celsius
+   * @param hotGas1C                           temperature of the hot gas 1, in Celsius
+   * @param hotGas2C                           temperature of the hot gas 2, in Celsius
+   * @param indoorC                            indoor temperature, in Celsius
+   * @param outdoorC                           outdoor temperature, in Celsius
+   * @param lowerStorageTankC                  temperature of the lower storage tank, in Celsius
+   * @param upperStorageTankC                  temperature of the upper storage tank, in Celsius
+   * @param lowerStorageTankMinimumC           minimum threshold value of the lower storage tank
+   * @param lowerStorageTankMaximumC           maximum threshold value of the lower storage tank
+   * @param lowerStorageTankMinimumAdjustedC   adjusted (= corrections applied) minimum threshold value of the lower
+   *                                           storage tank
+   * @param lowerStorageTankMaximumAdjustedC   adjusted (= corrections applied) maximum threshold value of the lower
+   *                                           storage tank
+   * @param upperStorageTankMinimumC           minimum threshold value of the upper storage tank
+   * @param upperStorageTankMaximumC           maximum threshold value of the upper storage tank
+   * @param upperStorageTankMinimumAdjustedC   adjusted (= corrections applied) minimum threshold value of the upper
+   *                                           storage tank
+   * @param upperStorageTankMaximumAdjustedC   adjusted (= corrections applied) maximum threshold value of the upper
+   *                                           storage tank
    */
   @JsonCreator
   public HeatPumpSnapshot(
       @JsonProperty("timestamp") final long timestampEpochS,
 
-      // CompressorSnapshot
+      // ControlSnapshot
+      @JsonProperty("active_heat_distribution_circuit_count") final int activeHeatDistributionCircuitCount,
       @JsonProperty("compressor_active") final boolean isCompressorActive,
 
       // TemperatureSnapshot
@@ -110,7 +112,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
       @JsonProperty("upper_storage_tank_minimum_adjusted|C") final float upperStorageTankMinimumAdjustedC,
       @JsonProperty("upper_storage_tank_maximum_adjusted|C") final float upperStorageTankMaximumAdjustedC) {
     this(Instant.ofEpochSecond(timestampEpochS),
-        new CompressorSnapshot(isCompressorActive),
+        new ControlSnapshot(activeHeatDistributionCircuitCount, isCompressorActive),
         new TemperatureSnapshot(
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitInC),
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitOutC),

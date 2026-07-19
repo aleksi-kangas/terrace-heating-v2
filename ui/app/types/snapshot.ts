@@ -1,5 +1,11 @@
+export interface ControlSnapshot {
+  isCompressorActive: boolean;
+  activeHeatDistributionCircuitCount: number;
+}
+
 export interface HeatPumpSnapshot {
   timestamp: string;
+  controlSnapshot: ControlSnapshot;
   temperatureSnapshot: TemperatureSnapshot;
   lowerStorageTankLimitSnapshot: StorageTankLimitSnapshot
   upperStorageTankLimitSnapshot: StorageTankLimitSnapshot

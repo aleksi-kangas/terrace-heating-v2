@@ -52,7 +52,7 @@ public final class HeatPumpCompressorService {
         final Instant timestamp = snapshot.getTimestamp();
         if (!timestamp.isBefore(bucketStart) && timestamp.isBefore(bucketEnd)) {
           ++totalCount;
-          if (snapshot.getCompressorSnapshot().isActive()) {
+          if (snapshot.getControlSnapshot().isCompressorActive()) {
             ++activeCount;
           }
           ++snapshotIndex;
