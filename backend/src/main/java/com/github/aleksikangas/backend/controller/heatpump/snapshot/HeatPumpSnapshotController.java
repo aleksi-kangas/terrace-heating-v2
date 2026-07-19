@@ -36,8 +36,14 @@ public final class HeatPumpSnapshotController {
     this.heatPumpSnapshotRepository = heatPumpSnapshotRepository;
   }
 
+  /**
+   * Fetches {@link HeatPumpSnapshot}s between two points in time.
+   *
+   * @param from Start boundary of the query timeline (e.g., 2026-07-10T00:00:00Z)
+   * @param to   End boundary of the query timeline
+   */
   @GetMapping
-  public ResponseEntity<List<HeatPumpSnapshot>> listSnapshotsFromTo(
+  public ResponseEntity<List<HeatPumpSnapshot>> getSnapshotsBetween(
       @DateTimeFormat(iso = ISO.DATE_TIME) @NotNull @RequestParam final Instant from,
       @DateTimeFormat(iso = ISO.DATE_TIME) @NotNull @RequestParam final Instant to) {
     if (from.isAfter(to)) {
@@ -49,8 +55,13 @@ public final class HeatPumpSnapshotController {
     return ResponseEntity.ok(heatPumpSnapshotRepository.findByTimestampBetweenOrderByTimestamp(from, to));
   }
 
+  /**
+   * Fetches {@link HeatPumpSnapshot}s for the given trailing {@code days}.
+   *
+   * @param days The number of trailing days
+   */
   @GetMapping("days/{days}")
-  public ResponseEntity<List<HeatPumpSnapshot>> listSnapshotsForPreviousDays(
+  public ResponseEntity<List<HeatPumpSnapshot>> getSnapshotsTrailingDays(
       @PathVariable @Min(1) @Max(30) final int days) {
     final Instant threshold = Instant.now().minus(days, ChronoUnit.DAYS);
     return ResponseEntity.ok(heatPumpSnapshotRepository.findByTimestampAfterOrderByTimestamp(threshold));
