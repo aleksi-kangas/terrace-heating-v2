@@ -3,11 +3,10 @@
 import {useMemo} from "react";
 import {DateTime} from "luxon";
 import {LineChart, ChartTooltip} from "@mantine/charts";
-import {TemperatureSnapshot} from "@/app/types/snapshot";
+import {HeatPumpSnapshot} from "@/app/types/snapshot";
 
 interface GenericTemperatureChartProps {
-  timestamps: DateTime[];
-  temperatureSnapshots: TemperatureSnapshot[];
+  heatPumpSnapshots: HeatPumpSnapshot[]
   xAxisDomainTrailingDays: number;
   series: {
     name: string;
@@ -17,17 +16,16 @@ interface GenericTemperatureChartProps {
 }
 
 const GenericTemperatureChart = ({
-                                   timestamps,
-                                   temperatureSnapshots,
+                                   heatPumpSnapshots,
                                    xAxisDomainTrailingDays,
                                    series
                                  }: GenericTemperatureChartProps) => {
   const data = useMemo(() =>
-          timestamps.map((timestamp, index) => ({
-            timestamp: timestamp.toSeconds(),
-            ...temperatureSnapshots[index],
+          heatPumpSnapshots.map((heatPumpSnapshot, index) => ({
+            timestamp: DateTime.fromISO(heatPumpSnapshot.timestamp).toSeconds(),
+            ...heatPumpSnapshot.temperatureSnapshot
           })),
-      [timestamps, temperatureSnapshots]
+      [heatPumpSnapshots]
   );
   const xAxisDomain = useMemo(() => {
     const now: DateTime = DateTime.now();

@@ -1,6 +1,6 @@
 'use client';
 
-import {useEffect, useState} from "react";
+import {useState} from "react";
 
 import ChartSelection from "./ChartSelection";
 import DaysSelection from "./DaysSelection";
@@ -10,10 +10,9 @@ import {
   ChartSelection as ChartSelectionType,
 } from "./chart-registry";
 
-import {HeatPumpSnapshot, TemperatureSnapshot} from "@/app/types/snapshot";
-import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
+import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {Card, Stack} from "@mantine/core";
-import {DateTime} from "luxon";
+import {usePathname, useRouter} from "next/navigation";
 
 const availableCharts = [
   {label: "External", value: "external"},
@@ -30,41 +29,19 @@ const availableDays = [
   {label: "1 Day", value: "1"},
 ];
 
-interface Props {
-  initialHeatPumpSnapshots: HeatPumpSnapshot[];
+interface ChartsPanelProps {
+  heatPumpSnapshots: HeatPumpSnapshot[];
+  trailingDays: number;
 }
 
-const ChartsPanel = ({initialHeatPumpSnapshots}: Props) => {
-  const [heatPumpSnapshots, setHeatPumpSnapshots] =
-      useState(initialHeatPumpSnapshots);
+const ChartsPanel = ({heatPumpSnapshots, trailingDays}: ChartsPanelProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const [chartSelection, setChartSelection] =
-      useState<ChartSelectionType>("external");
-
-  const [daysSelection, setDaysSelection] =
-      useState("1");
-
-  useEffect(() => {
-    if (daysSelection === "1") {
-      setHeatPumpSnapshots(initialHeatPumpSnapshots);
-      return;
-    }
-
-    const load = async () => {
-      setHeatPumpSnapshots(
-          await fetchHeatPumpSnapshotsTrailingDays(Number(daysSelection))
-      );
-    };
-
-    load();
-  }, [daysSelection, initialHeatPumpSnapshots]);
+  const [chartSelection, setChartSelection] = useState<ChartSelectionType>("external");
 
   const selectedChart = chartRegistry[chartSelection];
-
   const SelectedChart = selectedChart.component;
-
-  const timestamps: DateTime[] = heatPumpSnapshots.map(heatPumpSnapshot => DateTime.fromISO(heatPumpSnapshot.timestamp))
-  const temperatureSnapshots: TemperatureSnapshot[] = heatPumpSnapshots.map(heatPumpSnapshot => heatPumpSnapshot.temperatureSnapshot);
 
   return (
       <Stack h="100%">
@@ -75,15 +52,16 @@ const ChartsPanel = ({initialHeatPumpSnapshots}: Props) => {
         />
         <Card radius="md" shadow="sm" withBorder style={{ flex: 1, minHeight: 0 }}>
           <SelectedChart
-              timestamps={timestamps}
-              temperatureSnapshots={temperatureSnapshots}
-              xAxisDomainTrailingDays={Number(daysSelection)}
+              heatPumpSnapshots={heatPumpSnapshots}
+              xAxisDomainTrailingDays={trailingDays}
               series={selectedChart.series}
           />
         </Card>
         <DaysSelection
-            selection={daysSelection}
-            onSelectionChange={setDaysSelection}
+            selection={String(trailingDays)}
+            onSelectionChange={(value) => {
+              router.push(`${pathname}?days=${value}`);
+            }}
             values={availableDays}
         />
       </Stack>

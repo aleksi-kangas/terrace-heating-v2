@@ -2,11 +2,18 @@ import ChartsPanel from "@/app/charts/components/ChartsPanel";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 
-const ChartsPage = async () => {
-  const trailingDays: number = 1;
+interface ChartsPageProps {
+  searchParams: Promise<{
+    days?: string
+  }>
+}
+
+const ChartsPage = async ({searchParams}: ChartsPageProps) => {
+  const params = await searchParams;
+  const trailingDays = Number(params.days ?? "1")
   const heatPumpSnapshots: HeatPumpSnapshot[] = await fetchHeatPumpSnapshotsTrailingDays(trailingDays);
   return (
-      <ChartsPanel initialHeatPumpSnapshots={heatPumpSnapshots}/>
+      <ChartsPanel heatPumpSnapshots={heatPumpSnapshots} trailingDays={trailingDays}/>
   );
 }
 
