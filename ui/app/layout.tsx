@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import '@mantine/core/styles.css';
 import '@mantine/charts/styles.css';
 import '@mantine/notifications/styles.css';
@@ -13,11 +14,14 @@ import {
 import React from "react";
 import Navbar from './components/navbar';
 
+export const metadata: Metadata = {
+  title: "Terrace Heating"
+}
+
 const RootLayout = ({children}: Readonly<{ children: React.ReactNode }>) => {
   return (
       <html lang="en" {...mantineHtmlProps}>
       <head>
-        <title>Terrace Heating</title>
         <ColorSchemeScript/>
       </head>
       <body>
