@@ -5,8 +5,9 @@ import {baseUrl} from "@/app/api/heat-pump/api";
 
 const compressorBaseUrl: string = `${baseUrl}/heat-pump/compressor`;
 
-export const fetchCompressorDutyCyclesTrailingDays = async (days: number): Promise<CompressorDutyCycle[]> => {
-  const url: string = `${compressorBaseUrl}/days/${days}`;
-  const response: Response = await fetch(url);
-  return await response.json();
-}
+export const fetchCompressorDutyCyclesTrailingDays = async (trailingDays: number, resolution: string = "PT1D"): Promise<CompressorDutyCycle[]> => {
+  const response = await fetch(
+      `${compressorBaseUrl}/days/${trailingDays}?resolution=${encodeURIComponent(resolution)}`
+  );
+  return response.json();
+};

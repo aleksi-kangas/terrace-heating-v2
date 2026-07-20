@@ -3,40 +3,58 @@
 import {useMemo} from 'react';
 import {DateTime} from 'luxon';
 import {BarChart, ChartTooltip} from '@mantine/charts';
-import {CompressorDutyCycle} from '@/app/types/compressor';
-import {Box} from "@mantine/core";
+import {Box, Group, SegmentedControl} from '@mantine/core';
+import {usePathname, useRouter, useSearchParams} from 'next/navigation';
+import {CompressorDutyCycle, Resolution, RESOLUTIONS} from '@/app/types/compressor';
 
 interface CompressorDutyCycleChartProps {
   compressorDutyCycles: CompressorDutyCycle[];
   xAxisDomainTrailingDays: number;
+  resolution: Resolution;
 }
 
 const CompressorDutyCycleChart = ({
                                     compressorDutyCycles,
                                     xAxisDomainTrailingDays,
+                                    resolution,
                                   }: CompressorDutyCycleChartProps) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const data = useMemo(() =>
-          compressorDutyCycles.map(compressorDutyCycle => ({
-            timestamp: DateTime.fromISO(compressorDutyCycle.startTime).toSeconds(),
-            dutyCycle: Math.round(compressorDutyCycle.load * 100),
-            activeCount: compressorDutyCycle.activeCount,
-            count: compressorDutyCycle.count,
+  const data = useMemo(
+      () =>
+          compressorDutyCycles.map((dutyCycle) => ({
+            timestamp: DateTime.fromISO(dutyCycle.startTime).toSeconds(),
+            dutyCycle: Math.round(dutyCycle.load * 100),
+            activeCount: dutyCycle.activeCount,
+            count: dutyCycle.count,
           })),
       [compressorDutyCycles]
   );
 
   const xAxisDomain = useMemo(() => {
     const now = DateTime.now();
-    return [now.minus({days: xAxisDomainTrailingDays}).toSeconds(), now.toSeconds()];
+    return [
+      now.minus({days: xAxisDomainTrailingDays}).toSeconds(),
+      now.toSeconds(),
+    ];
   }, [xAxisDomainTrailingDays]);
+
+  const handleResolutionChange = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("resolution", value);
+    router.replace(`${pathname}?${params}`, {
+      scroll: false,
+    });
+  };
 
   return (
       <Box h="100%" p="md">
         <BarChart
             data={data}
             dataKey="timestamp"
-            h="100%"
+            h="95%"
             series={[
               {
                 name: 'dutyCycle',
@@ -71,9 +89,16 @@ const CompressorDutyCycleChart = ({
               ),
             }}
         />
+        <Group h="5%" justify="center" mt="md">
+          <SegmentedControl
+              value={resolution}
+              onChange={handleResolutionChange}
+              data={[...RESOLUTIONS]}
+          />
+        </Group>
       </Box>
   );
-}
+};
 
 export default CompressorDutyCycleChart;
 
@@ -86,6 +111,7 @@ const tickLabelFormatter = (epochSeconds: number) => DateTime
       minute: '2-digit',
       hourCycle: "h24",
     });
+
 const tooltipLabelFormatter = (value?: number | string) => {
   if (value == null) return "";
   const epochSeconds = typeof value === "string" ? Number(value) : value;
