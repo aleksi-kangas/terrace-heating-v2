@@ -29,7 +29,7 @@ const CompressorDutyCycleChart = ({
             const end = DateTime.fromISO(dutyCycle.endTime);
             return {
               timestamp: (start.toSeconds() + end.toSeconds()) / 2,
-              load: dutyCycle.load * 100,
+              load: Math.round(dutyCycle.load * 100),
               activeCount: dutyCycle.activeCount,
               count: dutyCycle.count,
             };
