@@ -24,15 +24,18 @@ const CompressorDutyCycleChart = ({
 
   const data = useMemo(
       () =>
-          compressorDutyCycles.map((dutyCycle) => ({
-            timestamp: DateTime.fromISO(dutyCycle.startTime).toSeconds(),
-            dutyCycle: Math.round(dutyCycle.load * 100),
-            activeCount: dutyCycle.activeCount,
-            count: dutyCycle.count,
-          })),
+          compressorDutyCycles.map((dutyCycle) => {
+            const start = DateTime.fromISO(dutyCycle.startTime);
+            const end = DateTime.fromISO(dutyCycle.endTime);
+            return {
+              timestamp: (start.toSeconds() + end.toSeconds()) / 2,
+              load: dutyCycle.load * 100,
+              activeCount: dutyCycle.activeCount,
+              count: dutyCycle.count,
+            };
+          }),
       [compressorDutyCycles]
   );
-
   const xAxisDomain = useMemo(() => {
     const now = DateTime.now();
     return [
@@ -57,12 +60,11 @@ const CompressorDutyCycleChart = ({
             h="95%"
             series={[
               {
-                name: 'dutyCycle',
+                name: 'load',
                 label: 'Compressor %',
                 color: 'blue',
               },
             ]}
-            type="percent"
             withBarValueLabel={true}
             withLegend={true}
             xAxisProps={{
@@ -73,6 +75,9 @@ const CompressorDutyCycleChart = ({
               tickFormatter: tickLabelFormatter,
               type: 'number',
             }}
+            yAxisProps={{
+              domain: [0, 100],
+            }}
             tooltipProps={{
               content: ({label, payload}) => (
                   <ChartTooltip
@@ -80,7 +85,7 @@ const CompressorDutyCycleChart = ({
                       payload={payload}
                       series={[
                         {
-                          name: 'dutyCycle',
+                          name: 'load',
                           label: 'Compressor %',
                           color: 'blue',
                         },
