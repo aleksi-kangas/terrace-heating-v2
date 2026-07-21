@@ -4,12 +4,8 @@
 
 package com.github.aleksikangas.backend.domain.snapshot;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Immutable;
 
 /**
@@ -17,19 +13,11 @@ import org.springframework.data.annotation.Immutable;
  *
  * @see HeatPumpSnapshot
  */
-@AllArgsConstructor
 @Embeddable
-@Getter
 @Immutable
-@NoArgsConstructor
-public final class StorageTankLimitSnapshot implements Serializable {
+public record StorageTankLimitSnapshot(float storageTankMinimumC,
+                                       float storageTankMaximumC,
+                                       float storageTankMinimumAdjustedC,
+                                       float storageTankMaximumAdjustedC) implements Serializable {
 
-  @Column(updatable = false)
-  private float storageTankMinimumC;
-  @Column(updatable = false)
-  private float storageTankMaximumC;
-  @Column(updatable = false)
-  private float storageTankMinimumAdjustedC;
-  @Column(updatable = false)
-  private float storageTankMaximumAdjustedC;
 }

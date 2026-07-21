@@ -32,7 +32,7 @@ import org.springframework.data.annotation.Immutable;
 @Immutable
 @NoArgsConstructor
 @Table(name = "heat_pump_snapshots")
-public final class HeatPumpSnapshot extends AbstractEntity {
+public class HeatPumpSnapshot extends AbstractEntity {
 
   @Column(nullable = false, updatable = false)
   private Instant timestamp;
