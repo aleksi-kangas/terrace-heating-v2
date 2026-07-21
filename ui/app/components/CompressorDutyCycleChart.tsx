@@ -53,11 +53,11 @@ const CompressorDutyCycleChart = ({
   };
 
   return (
-      <Box h="100%" p="md">
+      <Box h="100%" p="xs" m="xs">
         <BarChart
             data={data}
             dataKey="timestamp"
-            h="95%"
+            h="90%"
             series={[
               {
                 name: 'load',
@@ -94,7 +94,7 @@ const CompressorDutyCycleChart = ({
               ),
             }}
         />
-        <Group h="5%" justify="center" mt="md">
+        <Group h="10%" justify="center" m="xs">
           <SegmentedControl
               value={resolution}
               onChange={handleResolutionChange}

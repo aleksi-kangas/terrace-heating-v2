@@ -44,7 +44,7 @@ const ChartsPanel = ({heatPumpSnapshots, trailingDays}: ChartsPanelProps) => {
             onSelectionChange={(value) => setChartSelection(value as ChartSelectionType)}
             values={availableCharts}
         />
-        <Card radius="md" shadow="sm" withBorder style={{ flex: 1, minHeight: 0 }}>
+        <Card radius="md" shadow="sm" p="xs" withBorder style={{flex: 1, minHeight: 0}}>
           <SelectedChart
               heatPumpSnapshots={heatPumpSnapshots}
               xAxisDomainTrailingDays={trailingDays}

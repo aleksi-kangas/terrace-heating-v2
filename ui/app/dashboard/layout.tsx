@@ -16,10 +16,10 @@ const DashboardLayout = ({
       <Grid>
         <GridCol span={{base: 12, lg: 8}}>
           <Stack h="80vh">
-            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+            <Card withBorder shadow="sm" radius="md" p="xs" style={{flex: 1}}>
               {charts}
             </Card>
-            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+            <Card withBorder shadow="sm" radius="md" p="xs" style={{flex: 1}}>
               {compressor}
             </Card>
           </Stack>

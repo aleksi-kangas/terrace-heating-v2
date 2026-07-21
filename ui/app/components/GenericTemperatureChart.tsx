@@ -33,7 +33,7 @@ const GenericTemperatureChart = ({
     return [now.minus({days: xAxisDomainTrailingDays}).toSeconds(), now.toSeconds()]
   }, [xAxisDomainTrailingDays]);
   return (
-      <Box h="100%" p="md">
+      <Box h="100%" p="xs" m="xs">
         <LineChart
             data={data}
             dataKey="timestamp"
