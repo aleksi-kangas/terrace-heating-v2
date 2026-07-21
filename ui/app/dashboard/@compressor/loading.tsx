@@ -1,6 +1,6 @@
 import {Center, Loader} from "@mantine/core";
 
-const LoadingDashboardGraphsPage = () => {
+const LoadingDashboardCompressorPage = () => {
   return (
       <Center h="100%">
         <Loader/>
@@ -8,4 +8,4 @@ const LoadingDashboardGraphsPage = () => {
   )
 }
 
-export default LoadingDashboardGraphsPage;
+export default LoadingDashboardCompressorPage;

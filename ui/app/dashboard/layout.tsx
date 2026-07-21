@@ -1,27 +1,41 @@
 import React from "react";
-import {Card, Grid, GridCol} from "@mantine/core";
+import {Card, Grid, GridCol, Stack} from "@mantine/core";
+
+interface DashboardLayoutProps {
+  charts: React.ReactNode;
+  compressor: React.ReactNode;
+  control: React.ReactNode;
+}
 
 const DashboardLayout = ({
                            charts,
-                           control
-                         }: {
-  charts: React.ReactNode,
-  control: React.ReactNode
-}) => {
+                           compressor,
+                           control,
+                         }: DashboardLayoutProps) => {
   return (
       <Grid>
         <GridCol span={{base: 12, lg: 8}}>
-          <Card h="80vh" radius="md" shadow="sm" withBorder>
-            {charts}
-          </Card>
+          <Stack h="80vh">
+            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+              {charts}
+            </Card>
+            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+              {compressor}
+            </Card>
+          </Stack>
         </GridCol>
         <GridCol span={{base: 12, lg: 4}}>
-          <Card h="80vh" radius="md" shadow="sm" withBorder>
-            {control}
-          </Card>
+          <Stack h="80vh">
+            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+              {control}
+            </Card>
+            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
+              {control}
+            </Card>
+          </Stack>
         </GridCol>
       </Grid>
-  )
-}
+  );
+};
 
 export default DashboardLayout;

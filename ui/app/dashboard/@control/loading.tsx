@@ -1,16 +1,10 @@
-import {Center, Divider, Loader} from "@mantine/core";
+import {Center, Loader} from "@mantine/core";
 
 const LoadingDashboardControlPage = () => {
   return (
-      <>
-        <Center h="100%">
-          <Loader/>
-        </Center>
-        <Divider my="md"/>
-        <Center h="100%">
-          <Loader/>
-        </Center>
-      </>
+      <Center h="100%">
+        <Loader/>
+      </Center>
   )
 }
 
