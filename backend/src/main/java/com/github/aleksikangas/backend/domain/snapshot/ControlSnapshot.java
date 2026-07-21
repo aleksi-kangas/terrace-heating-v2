@@ -1,9 +1,8 @@
 package com.github.aleksikangas.backend.domain.snapshot;
 
-import com.github.aleksikangas.backend.persistence.core.AbstractEntity;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.Embeddable;
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,15 +14,14 @@ import org.springframework.data.annotation.Immutable;
  * @see HeatPumpSnapshot
  */
 @AllArgsConstructor
-@Entity
+@Embeddable
 @Getter
 @Immutable
 @NoArgsConstructor
-@Table(name = "control_snapshots")
-public final class ControlSnapshot extends AbstractEntity {
+public final class ControlSnapshot implements Serializable {
 
   @Column(updatable = false)
   private int activeHeatDistributionCircuitCount;
   @Column(updatable = false)
-  private boolean isCompressorActive;
+  private boolean compressorActive;
 }

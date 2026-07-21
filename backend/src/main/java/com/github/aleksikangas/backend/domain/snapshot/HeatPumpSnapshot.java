@@ -8,20 +8,21 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.aleksikangas.backend.persistence.core.AbstractEntity;
 import com.github.aleksikangas.backend.utils.TemperatureUtils;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.EmbeddedColumnNaming;
 import org.springframework.data.annotation.Immutable;
 
 /**
  * A snapshot of heat-pump state at a point in time.
  *
+ * @see ControlSnapshot
  * @see StorageTankLimitSnapshot
  * @see TemperatureSnapshot
  */
@@ -36,13 +37,17 @@ public final class HeatPumpSnapshot extends AbstractEntity {
   @Column(nullable = false, updatable = false)
   private Instant timestamp;
 
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
+  @EmbeddedColumnNaming("control_%s")
   private ControlSnapshot controlSnapshot;
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
+  @EmbeddedColumnNaming("temperature_%s")
   private TemperatureSnapshot temperatureSnapshot;
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
+  @EmbeddedColumnNaming("lower_storage_tank_%s")
   private StorageTankLimitSnapshot lowerStorageTankLimitSnapshot;
-  @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+  @Embedded
+  @EmbeddedColumnNaming("upper_storage_tank_%s")
   private StorageTankLimitSnapshot upperStorageTankLimitSnapshot;
 
   /**
@@ -50,7 +55,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
    *
    * @param timestampEpochS                    timestamp of the snapshot as seconds from epoch
    * @param activeHeatDistributionCircuitCount the number of active heat distribution circuits
-   * @param isCompressorActive                 whether the compressor is active or not
+   * @param compressorActive                   whether the compressor is active or not
    * @param groundCircuitInC                   temperature of the ground circuit input, in Celsius
    * @param groundCircuitOutC                  temperature of the ground circuit output, in Celsius
    * @param heatDistributionCircuit1C          temperature of the heat distribution circuit 1, in Celsius
@@ -81,7 +86,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
 
       // ControlSnapshot
       @JsonProperty("active_heat_distribution_circuit_count") final int activeHeatDistributionCircuitCount,
-      @JsonProperty("compressor_active") final boolean isCompressorActive,
+      @JsonProperty("compressor_active") final boolean compressorActive,
 
       // TemperatureSnapshot
       @JsonProperty("ground_circuit_in|C") final float groundCircuitInC,
@@ -112,7 +117,7 @@ public final class HeatPumpSnapshot extends AbstractEntity {
       @JsonProperty("upper_storage_tank_minimum_adjusted|C") final float upperStorageTankMinimumAdjustedC,
       @JsonProperty("upper_storage_tank_maximum_adjusted|C") final float upperStorageTankMaximumAdjustedC) {
     this(Instant.ofEpochSecond(timestampEpochS),
-        new ControlSnapshot(activeHeatDistributionCircuitCount, isCompressorActive),
+        new ControlSnapshot(activeHeatDistributionCircuitCount, compressorActive),
         new TemperatureSnapshot(
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitInC),
             TemperatureUtils.roundToOneDecimalPlace(groundCircuitOutC),
