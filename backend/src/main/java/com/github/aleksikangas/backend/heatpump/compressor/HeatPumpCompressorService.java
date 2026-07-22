@@ -5,12 +5,10 @@
 package com.github.aleksikangas.backend.heatpump.compressor;
 
 import com.github.aleksikangas.backend.domain.compressor.CompressorDutyCycle;
-import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
 import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshotRepository;
 import com.google.common.base.Preconditions;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,61 +23,24 @@ public final class HeatPumpCompressorService {
     this.heatPumpSnapshotRepository = Objects.requireNonNull(heatPumpSnapshotRepository);
   }
 
-  public List<CompressorDutyCycle> getDutyCycles(
-      final Instant startTime,
-      final Instant endTime,
-      final Duration bucketSize) {
-
+  public List<CompressorDutyCycle> getDutyCycles(final Instant startTime, final Instant endTime,
+      final Duration resolution) {
     Preconditions.checkArgument(startTime.isBefore(endTime), "startTime must be before endTime");
-    Objects.requireNonNull(bucketSize, "bucketSize cannot be null");
+    Objects.requireNonNull(resolution, "resolution cannot be null");
+    return heatPumpSnapshotRepository.findDutyCycles(startTime, endTime, toInterval(resolution));
+  }
 
-    final List<HeatPumpSnapshot> snapshots =
-        heatPumpSnapshotRepository.findByTimestampBetweenOrderByTimestamp(startTime, endTime);
-
-    final List<CompressorDutyCycle> dutyCycles = new ArrayList<>();
-
-    Instant bucketStart = startTime;
-    int snapshotIndex = 0;
-
-    while (bucketStart.isBefore(endTime)) {
-      final Instant bucketEnd = bucketStart.plus(bucketSize);
-
-      long activeCount = 0;
-      long totalCount = 0;
-
-      // [bucketStart, bucketEnd)
-      while (snapshotIndex < snapshots.size()) {
-        final HeatPumpSnapshot snapshot = snapshots.get(snapshotIndex);
-        final Instant timestamp = snapshot.getTimestamp();
-
-        if (!timestamp.isBefore(bucketStart) && timestamp.isBefore(bucketEnd)) {
-          ++totalCount;
-          if (snapshot.getControlSnapshot().isCompressorActive()) {
-            ++activeCount;
-          }
-          ++snapshotIndex;
-        } else if (!timestamp.isBefore(bucketEnd)) {
-          break;
-        } else {
-          ++snapshotIndex;
-        }
-      }
-
-      final double load = totalCount == 0
-          ? 0.0
-          : (double) activeCount / totalCount;
-
-      dutyCycles.add(
-          new CompressorDutyCycle(
-              bucketStart,
-              bucketEnd,
-              load,
-              activeCount,
-              totalCount));
-
-      bucketStart = bucketEnd;
+  private static String toInterval(final Duration resolution) {
+    final long seconds = resolution.getSeconds();
+    if (seconds % 86400 == 0) {
+      return (seconds / 86400) + " days";
     }
-
-    return dutyCycles;
+    if (seconds % 3600 == 0) {
+      return (seconds / 3600) + " hours";
+    }
+    if (seconds % 60 == 0) {
+      return (seconds / 60) + " minutes";
+    }
+    return seconds + " seconds";
   }
 }

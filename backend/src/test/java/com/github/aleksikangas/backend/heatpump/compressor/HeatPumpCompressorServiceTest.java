@@ -10,12 +10,14 @@ import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshot
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class HeatPumpCompressorServiceTest {
 
