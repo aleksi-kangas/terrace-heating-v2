@@ -6,7 +6,6 @@ package com.github.aleksikangas.backend.controller.heatpump.temperature;
 
 import com.github.aleksikangas.backend.domain.snapshot.TemperatureSnapshot;
 import com.github.aleksikangas.backend.heatpump.client.HeatPumpClient;
-import com.github.aleksikangas.backend.heatpump.client.HeatPumpClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,10 +24,6 @@ public final class HeatPumpTemperatureController {
 
   @GetMapping
   public ResponseEntity<TemperatureSnapshot> getTemperatures() {
-    try {
-      return ResponseEntity.ok(heatPumpClient.readTemperatureSnapshot());
-    } catch (final HeatPumpClientException e) {
-      return ResponseEntity.internalServerError().build();
-    }
+    return ResponseEntity.ok(heatPumpClient.readTemperatureSnapshot());
   }
 }
