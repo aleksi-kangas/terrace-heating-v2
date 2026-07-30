@@ -14,12 +14,28 @@ import com.github.aleksikangas.backend.domain.timer.TimerType;
 public interface HeatPumpClient {
 
   /**
+   * Read the number of active heat distribution circuits.
+   *
+   * @return number of active heat distribution circuits
+   * @throws HeatPumpClientException on failure
+   */
+  short readActiveHeatDistributionCircuitCount();
+
+  /**
+   * Write the number of active heat distribution circuits.
+   *
+   * @param activeHeatDistributionCircuitCount to write
+   * @throws HeatPumpClientException on failure
+   */
+  void writeActiveHeatDistributionCircuitCount(short activeHeatDistributionCircuitCount);
+
+  /**
    * Read the current temperatures as {@link TemperatureSnapshot} from the heat-pump.
    *
    * @return a {@link TemperatureSnapshot} of the current temperatures
    * @throws HeatPumpClientException on failure
    */
-  TemperatureSnapshot readTemperatureSnapshot() throws HeatPumpClientException;
+  TemperatureSnapshot readTemperatureSnapshot();
 
   /**
    * Read the {@link TimerSchedule} for the given {@link TimerType}.
@@ -28,7 +44,7 @@ public interface HeatPumpClient {
    * @return the current {@link TimerSchedule} of the given {@link TimerType}
    * @throws HeatPumpClientException on failure
    */
-  TimerSchedule readTimerSchedule(TimerType timerType) throws HeatPumpClientException;
+  TimerSchedule readTimerSchedule(TimerType timerType);
 
   /**
    * Write the given {@link TimerSchedule} as the current of the given {@link TimerType}.
@@ -37,5 +53,5 @@ public interface HeatPumpClient {
    * @param timerSchedule to write
    * @throws HeatPumpClientException on failure
    */
-  void writeTimerSchedule(TimerType timerType, TimerSchedule timerSchedule) throws HeatPumpClientException;
+  void writeTimerSchedule(TimerType timerType, TimerSchedule timerSchedule);
 }
