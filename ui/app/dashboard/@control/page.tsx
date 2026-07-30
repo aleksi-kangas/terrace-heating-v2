@@ -1,18 +1,16 @@
 import {Center, Paper, SimpleGrid, Stack, Switch, Text, ThemeIcon, Title} from "@mantine/core";
 import {fetchHeatingState} from "@/app/api/heat-pump/heating";
 import {HeatingState} from "@/app/types/heating";
-import {TemperatureSnapshot} from "@/app/types/snapshot";
 import {fetchTemperatureSnapshot} from "@/app/api/heat-pump/temperatures";
 import {IconFlame} from "@tabler/icons-react";
 
 const DashboardControlPage = async () => {
-  const heatingState: HeatingState = await fetchHeatingState();
-  const temperatureSnapshot: TemperatureSnapshot = await fetchTemperatureSnapshot();
-  console.log(temperatureSnapshot)
+  const heatingStatePromise = fetchHeatingState();
+  const temperatureSnapshotPromise = fetchTemperatureSnapshot();
+  const [heatingState, temperatureSnapshot] = await Promise.all([heatingStatePromise, temperatureSnapshotPromise])
   const heatingActive: boolean = heatingState === HeatingState.ACTIVE
   return (
       <Stack h="100%" justify="center" gap="xl">
-        {/* Header */}
         <Stack align="center" gap="xs">
           <ThemeIcon
               size={64}
@@ -25,8 +23,6 @@ const DashboardControlPage = async () => {
 
           <Title order={2}>Heating</Title>
         </Stack>
-
-        {/* Switch */}
         <Center>
           <Switch
               checked={heatingActive}
@@ -36,8 +32,6 @@ const DashboardControlPage = async () => {
               offLabel="OFF"
           />
         </Center>
-
-
         <SimpleGrid cols={2} spacing="md">
           <Paper withBorder radius="md" p="md">
             <Stack gap={2}>
