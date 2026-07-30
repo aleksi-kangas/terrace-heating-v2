@@ -4,12 +4,14 @@
 
 package com.github.aleksikangas.backend.heatpump.client.registers;
 
+import com.google.common.base.Preconditions;
 import java.util.Arrays;
 
 public record RegisterRange(int startRegister,
                             int registerCount) {
 
   public static RegisterRange of(final int... registers) {
+    Preconditions.checkArgument(registers.length > 0);
     final int minimumRegister = Arrays.stream(registers).min().orElseThrow();
     final int maximumRegister = Arrays.stream(registers).max().orElseThrow();
     final int registerCount = maximumRegister - minimumRegister + 1;

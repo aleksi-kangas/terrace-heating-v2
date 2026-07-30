@@ -6,19 +6,22 @@ package com.github.aleksikangas.backend.heatpump.client.registers;
 
 public final class TemperatureRegisters {
 
-  public static int outdoor = 1;
-  public static int hotGas1 = 2;
-  public static int hotGas2 = 3;
-  public static int heatDistributionCircuit1 = 5;
-  public static int heatDistributionCircuit2 = 6;
-  public static int lowerStorageTank = 17;
-  public static int upperStorageTank = 18;
-  public static int indoor = 74;
-  public static int groundCircuitOut = 98;
-  public static int groundCircuitIn = 99;
-  public static int heatDistributionCircuit3 = 117;
+  public static final int OUTDOOR = 1;
+  public static final int HOT_GAS_1 = 2;
+  public static final int HOT_GAS_2 = 3;
+  public static final int HEAT_DISTRIBUTION_CIRCUIT_1 = 5;
+  public static final int HEAT_DISTRIBUTION_CIRCUIT_2 = 6;
+  public static final int LOWER_STORAGE_TANK = 17;
+  public static final int UPPER_STORAGE_TANK = 18;
+  public static final int INDOOR = 74;
+  public static final int GROUND_CIRCUIT_OUT = 98;
+  public static final int GROUND_CIRCUIT_IN = 99;
+  public static final int HEAT_DISTRIBUTION_CIRCUIT_3 = 117;
 
   public static RegisterRange getRegisterRange() {
     return new RegisterRange(1, 117);
+  }
+
+  private TemperatureRegisters() {
   }
 }

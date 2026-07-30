@@ -17,27 +17,27 @@ public final class TemperatureSnapshotParser {
     final RegisterRange temperatureRegisterRange = TemperatureRegisters.getRegisterRange();
     return new TemperatureSnapshot(
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.groundCircuitIn, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.GROUND_CIRCUIT_IN, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.groundCircuitOut, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.GROUND_CIRCUIT_OUT, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.heatDistributionCircuit1, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.HEAT_DISTRIBUTION_CIRCUIT_1, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.heatDistributionCircuit2, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.HEAT_DISTRIBUTION_CIRCUIT_2, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.heatDistributionCircuit3, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.HEAT_DISTRIBUTION_CIRCUIT_3, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.hotGas1, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.HOT_GAS_1, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.hotGas2, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.HOT_GAS_2, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.indoor, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.INDOOR, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.lowerStorageTank, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.LOWER_STORAGE_TANK, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.outdoor, temperatureRegisterValues),
+            temperatureRegisterRange, TemperatureRegisters.OUTDOOR, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.upperStorageTank, temperatureRegisterValues));
+            temperatureRegisterRange, TemperatureRegisters.UPPER_STORAGE_TANK, temperatureRegisterValues));
   }
 
   private static float getRegisterValue(
