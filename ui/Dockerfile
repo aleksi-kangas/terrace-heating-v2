@@ -5,10 +5,9 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM node:26-alpine
-RUN addgroup -S heating &&  adduser -S -G heating ui
+FROM node:26-slim
 WORKDIR /app
-COPY --from=build --chown=ui:heating /app ./
-USER ui
+COPY --from=build --chown=node:node /app ./
+USER node
 EXPOSE 3000
 CMD ["npm", "start"]
