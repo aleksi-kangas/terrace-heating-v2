@@ -6,6 +6,9 @@ import {
   IconArrowDown,
   IconArrowUp,
   IconFlame,
+  IconHexagonNumber1,
+  IconHexagonNumber2,
+  IconHexagonNumber3,
   IconHome,
   IconRectangleRoundedBottom,
   IconRectangleRoundedTop,
@@ -78,20 +81,20 @@ const DashboardControlPage = async () => {
           <TemperatureCard
               label="Heat Distribution Circuit 1"
               value={temperatureSnapshot.heatDistributionCircuit1C}
-              color="indigo"
-              icon={<IconRectangleRoundedTop/>}
+              color="lime"
+              icon={<IconHexagonNumber1/>}
           />
           <TemperatureCard
               label="Heat Distribution Circuit 2"
               value={temperatureSnapshot.heatDistributionCircuit2C}
-              color="indigo"
-              icon={<IconRectangleRoundedTop/>}
+              color="yellow"
+              icon={<IconHexagonNumber2/>}
           />
           <TemperatureCard
               label="Heat Distribution Circuit 3"
               value={temperatureSnapshot.heatDistributionCircuit3C}
-              color="indigo"
-              icon={<IconRectangleRoundedTop/>}
+              color="grape"
+              icon={<IconHexagonNumber3/>}
           />
         </SimpleGrid>
       </Stack>
