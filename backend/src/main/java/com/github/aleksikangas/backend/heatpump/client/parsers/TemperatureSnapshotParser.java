@@ -33,9 +33,9 @@ public final class TemperatureSnapshotParser {
         getRegisterValue(
             temperatureRegisterRange, TemperatureRegisters.INDOOR, temperatureRegisterValues),
         getRegisterValue(
-            temperatureRegisterRange, TemperatureRegisters.LOWER_STORAGE_TANK, temperatureRegisterValues),
-        getRegisterValue(
             temperatureRegisterRange, TemperatureRegisters.OUTDOOR, temperatureRegisterValues),
+        getRegisterValue(
+            temperatureRegisterRange, TemperatureRegisters.LOWER_STORAGE_TANK, temperatureRegisterValues),
         getRegisterValue(
             temperatureRegisterRange, TemperatureRegisters.UPPER_STORAGE_TANK, temperatureRegisterValues));
   }

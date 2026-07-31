@@ -153,7 +153,8 @@ public class HeatPumpTcpClient implements HeatPumpClient {
     if (registersModbusMessage == null) {
       throw new ModbusException("Failed to unwrap Modbus message as RegistersModbusMessage");
     }
-    return registersModbusMessage.dataDecode();
+    final short[] data = registersModbusMessage.dataDecode();
+    return data != null ? data : new short[0];
   }
 
   private void writeHoldingRegisterRange(final RegisterRange registerRange, final short[] registerValues)
