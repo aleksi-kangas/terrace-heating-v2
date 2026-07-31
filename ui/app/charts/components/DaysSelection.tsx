@@ -8,9 +8,10 @@ interface DaysSelectionProps {
     label: string;
     value: string;
   }[]
+  disabled?: boolean;
 }
 
-const DaysSelection = ({selection, onSelectionChange, values}: DaysSelectionProps) => {
+const DaysSelection = ({selection, onSelectionChange, values, disabled}: DaysSelectionProps) => {
   return (
       <Group justify="center" mt="xl">
         <SegmentedControl
@@ -19,6 +20,7 @@ const DaysSelection = ({selection, onSelectionChange, values}: DaysSelectionProp
             value={selection}
             onChange={onSelectionChange}
             data={values}
+            disabled={disabled}
         />
       </Group>
   )

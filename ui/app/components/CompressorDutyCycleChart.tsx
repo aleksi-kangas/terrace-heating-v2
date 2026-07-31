@@ -1,11 +1,12 @@
 'use client';
 
-import {useMemo} from 'react';
+import {useMemo, useTransition} from 'react';
 import {DateTime} from 'luxon';
 import {BarChart, ChartTooltip} from '@mantine/charts';
-import {Box, Group, SegmentedControl} from '@mantine/core';
+import {Box, LoadingOverlay} from '@mantine/core';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {CompressorDutyCycle, Resolution, RESOLUTIONS} from '@/app/types/compressor';
+import ResolutionSelection from "@/app/components/CompresorDutyCycleResolutionSelection";
 
 interface CompressorDutyCycleChartProps {
   compressorDutyCycles: CompressorDutyCycle[];
@@ -21,6 +22,7 @@ const CompressorDutyCycleChart = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const data = useMemo(
       () =>
@@ -36,6 +38,7 @@ const CompressorDutyCycleChart = ({
           }),
       [compressorDutyCycles]
   );
+
   const xAxisDomain = useMemo(() => {
     const now = DateTime.now();
     return [
@@ -45,15 +48,21 @@ const CompressorDutyCycleChart = ({
   }, [xAxisDomainTrailingDays]);
 
   const handleResolutionChange = (value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("resolution", value);
-    router.replace(`${pathname}?${params}`, {
-      scroll: false,
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('resolution', value);
+      router.replace(`${pathname}?${params}`, {scroll: false});
     });
   };
 
   return (
-      <Box h="100%" p="xs" m="xs">
+      <Box h="100%" p="xs" m="xs" style={{position: 'relative'}}>
+        <LoadingOverlay
+            visible={isPending}
+            zIndex={10}
+            overlayProps={{radius: 'sm', blur: 1}}
+        />
+
         <BarChart
             data={data}
             dataKey="timestamp"
@@ -94,40 +103,36 @@ const CompressorDutyCycleChart = ({
               ),
             }}
         />
-        <Group h="10%" justify="center" m="xs">
-          <SegmentedControl
-              value={resolution}
-              onChange={handleResolutionChange}
-              data={[...RESOLUTIONS]}
-          />
-        </Group>
+        <ResolutionSelection
+            selection={resolution}
+            onSelectionChange={handleResolutionChange}
+            values={[...RESOLUTIONS]}
+            disabled={isPending}
+        />
       </Box>
   );
 };
 
 export default CompressorDutyCycleChart;
 
-const tickLabelFormatter = (epochSeconds: number) => DateTime
-    .fromSeconds(epochSeconds)
-    .toLocaleString({
+const tickLabelFormatter = (epochSeconds: number) =>
+    DateTime.fromSeconds(epochSeconds).toLocaleString({
       weekday: 'short',
       day: 'numeric',
       hour: 'numeric',
       minute: '2-digit',
-      hourCycle: "h24",
+      hourCycle: 'h24',
     });
 
 const tooltipLabelFormatter = (value?: number | string) => {
-  if (value == null) return "";
-  const epochSeconds = typeof value === "string" ? Number(value) : value;
-  if (Number.isNaN(epochSeconds)) return "";
-  return DateTime
-      .fromSeconds(epochSeconds)
-      .toLocaleString({
-        weekday: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        hourCycle: "h24",
-      });
-}
+  if (value == null) return '';
+  const epochSeconds = typeof value === 'string' ? Number(value) : value;
+  if (Number.isNaN(epochSeconds)) return '';
+  return DateTime.fromSeconds(epochSeconds).toLocaleString({
+    weekday: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h24',
+  });
+};
