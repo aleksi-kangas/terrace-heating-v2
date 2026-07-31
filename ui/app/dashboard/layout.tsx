@@ -25,14 +25,9 @@ const DashboardLayout = ({
           </Stack>
         </GridCol>
         <GridCol span={{base: 12, lg: 4}}>
-          <Stack h="80vh">
-            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
-              {control}
-            </Card>
-            <Card withBorder shadow="sm" radius="md" style={{flex: 1}}>
-              {control}
-            </Card>
-          </Stack>
+          <Card withBorder shadow="sm" radius="md" p="xs" h={{base: "auto", lg: "80vh"}}>
+            {control}
+          </Card>
         </GridCol>
       </Grid>
   );

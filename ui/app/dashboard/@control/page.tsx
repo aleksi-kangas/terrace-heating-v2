@@ -1,8 +1,17 @@
-import {Center, Paper, SimpleGrid, Stack, Switch, Text, ThemeIcon, Title} from "@mantine/core";
+import {SimpleGrid, Stack, Switch, ThemeIcon, Title} from "@mantine/core";
 import {fetchHeatingState} from "@/app/api/heat-pump/heating";
 import {HeatingState} from "@/app/types/heating";
 import {fetchTemperatureSnapshot} from "@/app/api/heat-pump/temperatures";
-import {IconFlame} from "@tabler/icons-react";
+import {
+  IconArrowDown,
+  IconArrowUp,
+  IconFlame,
+  IconHome,
+  IconRectangleRoundedBottom,
+  IconRectangleRoundedTop,
+  IconSun
+} from "@tabler/icons-react";
+import TemperatureCard from "@/app/components/TemperatureCard";
 
 const DashboardControlPage = async () => {
   const heatingStatePromise = fetchHeatingState();
@@ -10,8 +19,8 @@ const DashboardControlPage = async () => {
   const [heatingState, temperatureSnapshot] = await Promise.all([heatingStatePromise, temperatureSnapshotPromise])
   const heatingActive: boolean = heatingState === HeatingState.ACTIVE
   return (
-      <Stack h="100%" justify="center" gap="xl">
-        <Stack align="center" gap="xs">
+      <Stack align="center" gap="xl" h="100%" justify="center">
+        <Stack align="center" gap="xl" justify="center">
           <ThemeIcon
               size={64}
               radius="xl"
@@ -20,10 +29,7 @@ const DashboardControlPage = async () => {
           >
             <IconFlame size={34}/>
           </ThemeIcon>
-
-          <Title order={2}>Heating</Title>
-        </Stack>
-        <Center>
+          <Title order={1}>Heating</Title>
           <Switch
               checked={heatingActive}
               size="xl"
@@ -31,28 +37,62 @@ const DashboardControlPage = async () => {
               onLabel="ON"
               offLabel="OFF"
           />
-        </Center>
-        <SimpleGrid cols={2} spacing="md">
-          <Paper withBorder radius="md" p="md">
-            <Stack gap={2}>
-              <Text size="xs" c="dimmed">
-                Indoor
-              </Text>
-              <Text fw={700} size="xl" c="green">
-                {temperatureSnapshot.indoorC.toFixed(1)}°C
-              </Text>
-            </Stack>
-          </Paper>
-          <Paper withBorder radius="md" p="md">
-            <Stack gap={2}>
-              <Text size="xs" c="dimmed">
-                Outdoor
-              </Text>
-              <Text fw={700} size="xl" c="blue">
-                {temperatureSnapshot.outdoorC.toFixed(1)}°C
-              </Text>
-            </Stack>
-          </Paper>
+        </Stack>
+        <SimpleGrid cols={{base: 2, sm: 3}} spacing="md">
+          <TemperatureCard
+              label="Indoor"
+              value={temperatureSnapshot.indoorC}
+              color="green"
+              icon={<IconHome/>}
+          />
+          <TemperatureCard
+              label="Outdoor"
+              value={temperatureSnapshot.outdoorC}
+              color="blue"
+              icon={<IconSun/>}
+          />
+          <TemperatureCard
+              label="Ground Circuit In"
+              value={temperatureSnapshot.groundCircuitInC}
+              color="orange"
+              icon={<IconArrowDown/>}
+          />
+          <TemperatureCard
+              label="Ground Circuit Out"
+              value={temperatureSnapshot.groundCircuitOutC}
+              color="cyan"
+              icon={<IconArrowUp/>}
+          />
+          <TemperatureCard
+              label="Lower Tank"
+              value={temperatureSnapshot.lowerStorageTankC}
+              color="teal"
+              icon={<IconRectangleRoundedBottom/>}
+          />
+          <TemperatureCard
+              label="Upper Tank"
+              value={temperatureSnapshot.upperStorageTankC}
+              color="indigo"
+              icon={<IconRectangleRoundedTop/>}
+          />
+          <TemperatureCard
+              label="Heat Distribution Circuit 1"
+              value={temperatureSnapshot.heatDistributionCircuit1C}
+              color="indigo"
+              icon={<IconRectangleRoundedTop/>}
+          />
+          <TemperatureCard
+              label="Heat Distribution Circuit 2"
+              value={temperatureSnapshot.heatDistributionCircuit2C}
+              color="indigo"
+              icon={<IconRectangleRoundedTop/>}
+          />
+          <TemperatureCard
+              label="Heat Distribution Circuit 3"
+              value={temperatureSnapshot.heatDistributionCircuit3C}
+              color="indigo"
+              icon={<IconRectangleRoundedTop/>}
+          />
         </SimpleGrid>
       </Stack>
   )
