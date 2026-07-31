@@ -18,8 +18,8 @@ const DashboardChartsPage = async ({searchParams}: DashboardChartsPageProps) => 
 
   const heatPumpSnapshots: HeatPumpSnapshot[] = await fetchHeatPumpSnapshotsTrailingDays(trailingDays);
   return (
-      <GenericTemperatureChart heatPumpSnapshots={heatPumpSnapshots} xAxisDomainTrailingDays={trailingDays}
-                               series={temperatureSeries}/>
+      <GenericTemperatureChart heatPumpSnapshots={heatPumpSnapshots} series={temperatureSeries}
+                               xAxisProps={{domainTrailingDays: trailingDays}}/>
   )
 }
 

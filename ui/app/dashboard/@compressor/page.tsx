@@ -19,8 +19,8 @@ const DashboardCompressorPage = async ({searchParams}: DashboardCompressorPagePr
 
   const compressorDutyCycles = await fetchCompressorDutyCyclesTrailingDays(trailingDays, resolution);
   return (
-      <CompressorDutyCycleChart compressorDutyCycles={compressorDutyCycles} xAxisDomainTrailingDays={trailingDays}
-                                resolution={resolution}/>
+      <CompressorDutyCycleChart compressorDutyCycles={compressorDutyCycles} resolution={resolution}
+                                xAxisProps={{domainTrailingDays: trailingDays}}/>
   )
 }
 
