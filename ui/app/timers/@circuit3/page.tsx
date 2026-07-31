@@ -1,6 +1,6 @@
 import {fetchTimerSchedule} from "@/app/api/heat-pump/timers";
 import {TimerType} from "@/app/types/timer";
-import TimerScheduleCard from "@/app/timers/components/timer-schedule-card";
+import TimerScheduleCard from "@/app/timers/components/TimerScheduleCard";
 
 const Circuit3TimersPage = async () => {
   const heatDistributionCircuit3TimerSchedule = await fetchTimerSchedule(TimerType.HEAT_DISTRIBUTION_CIRCUIT_3);
