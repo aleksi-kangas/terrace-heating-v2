@@ -27,7 +27,7 @@ export const chartRegistry = {
     series: [
       {
         name: "upperStorageTankC",
-        label: "Top Tank °C",
+        label: "Upper Tank °C",
         color: "orange"
       },
       {
