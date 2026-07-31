@@ -44,7 +44,7 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
                 size="xs"
                 w={60}
                 value={schedule.startHour}
-                disabled={!isEditing}
+                readOnly={!isEditing}
                 hideControls={!isEditing}
             />
           </Table.Td>
@@ -53,7 +53,7 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
                 size="xs"
                 w={60}
                 value={schedule.endHour}
-                disabled={!isEditing}
+                readOnly={!isEditing}
                 hideControls={!isEditing}
             />
           </Table.Td>
@@ -62,7 +62,7 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
                 size="xs"
                 w={60}
                 value={schedule.temperatureDeltaC}
-                disabled={!isEditing}
+                readOnly={!isEditing}
                 hideControls={!isEditing}
             />
           </Table.Td>
