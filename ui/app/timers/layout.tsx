@@ -8,7 +8,7 @@ interface TimersLayoutProps {
 
 const TimersLayout = ({circuit3, lowerTank}: TimersLayoutProps) => {
   return (
-      <SimpleGrid cols={{base: 1, md: 2}} spacing="xl" p="md">
+      <SimpleGrid cols={{base: 1, md: 2}} spacing="xl" p={{base: "xs", lg: "md"}}>
         <Card h="100%" shadow="sm" padding="lg" radius="md" withBorder>
           {circuit3}
         </Card>

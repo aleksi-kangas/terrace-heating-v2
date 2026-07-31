@@ -31,16 +31,18 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
   const rows = WEEKDAYS.map((dayName) => {
     const weekdayEnum = WEEKDAY_MAP[dayName];
     const schedule = getWeekdaySchedule(timerSchedule, weekdayEnum);
+    const shortName = dayName.slice(0, 3).toUpperCase();
 
     return (
         <Table.Tr key={dayName}>
           <Table.Td>
-            <Text size="sm" fw={500}>{dayName}</Text>
+            <Text size="sm" fw={500} hiddenFrom="sm">{shortName}</Text>
+            <Text size="sm" fw={500} visibleFrom="sm">{dayName}</Text>
           </Table.Td>
           <Table.Td>
             <NumberInput
                 size="xs"
-                w={70}
+                w={60}
                 value={schedule.startHour}
                 disabled={!isEditing}
                 hideControls={!isEditing}
@@ -49,7 +51,7 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
           <Table.Td>
             <NumberInput
                 size="xs"
-                w={70}
+                w={60}
                 value={schedule.endHour}
                 disabled={!isEditing}
                 hideControls={!isEditing}
@@ -58,7 +60,7 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
           <Table.Td>
             <NumberInput
                 size="xs"
-                w={70}
+                w={60}
                 value={schedule.temperatureDeltaC}
                 disabled={!isEditing}
                 hideControls={!isEditing}
@@ -76,9 +78,18 @@ const TimerScheduleCard = ({title, timerSchedule}: TimerScheduleCardProps) => {
         <Table verticalSpacing="sm">
           <Table.Thead>
             <Table.Tr>
-              <Table.Th style={{ fontSize: '10px', color: 'gray' }}>WEEKDAY</Table.Th>
-              <Table.Th style={{ fontSize: '10px', color: 'gray' }}>START HOUR</Table.Th>
-              <Table.Th style={{ fontSize: '10px', color: 'gray' }}>END HOUR</Table.Th>
+              <Table.Th style={{fontSize: '10px', color: 'gray'}}>
+                <Text hiddenFrom="sm" inherit>DAY</Text>
+                <Text visibleFrom="sm" inherit>WEEKDAY</Text>
+              </Table.Th>
+              <Table.Th style={{fontSize: '10px', color: 'gray'}}>
+                <Text hiddenFrom="sm" inherit>START H</Text>
+                <Text visibleFrom="sm" inherit>START HOUR</Text>
+              </Table.Th>
+              <Table.Th style={{fontSize: '10px', color: 'gray'}}>
+                <Text hiddenFrom="sm" inherit>END H</Text>
+                <Text visibleFrom="sm" inherit>END HOUR</Text>
+              </Table.Th>
               <Table.Th style={{ fontSize: '10px', color: 'gray' }}>Δ °C</Table.Th>
             </Table.Tr>
           </Table.Thead>
