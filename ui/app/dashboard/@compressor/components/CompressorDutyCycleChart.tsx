@@ -8,7 +8,7 @@ import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {CompressorDutyCycle, Resolution, RESOLUTIONS} from '@/app/types/compressor';
 import ResolutionSelection from "@/app/dashboard/@compressor/components/CompresorDutyCycleResolutionSelection";
 import {useMediaQuery} from "@mantine/hooks";
-import {tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
+import {tickLabelFormatter, tooltipDatetimeRangeFormatter} from "@/app/utils/chart-formatters";
 
 interface XAxisProps {
   domainTrailingDays: number;
@@ -20,25 +20,22 @@ interface CompressorDutyCycleChartProps {
   xAxisProps: XAxisProps;
 }
 
-const DutyCycleTooltip = ({
-                            label,
-                            payload,
-                          }: {
-  label?: string | number;
-  payload?: readonly Record<string, any>[];
-}) => (
-    <ChartTooltip
-        label={tooltipLabelFormatter(label)}
-        payload={payload as any}
-        series={[
-          {
-            name: 'load',
-            label: 'Compressor %',
-            color: 'blue',
-          },
-        ]}
-    />
-);
+const DutyCycleTooltip = ({payload}: { payload?: readonly Record<string, any>[]; }) => {
+  const point = payload?.[0]?.payload;
+  return (
+      <ChartTooltip
+          label={tooltipDatetimeRangeFormatter(point?.startTime, point?.endTime)}
+          payload={payload as any}
+          series={[
+            {
+              name: 'load',
+              label: 'Compressor %',
+              color: 'blue',
+            },
+          ]}
+      />
+  )
+};
 
 const CompressorDutyCycleChart = ({
                                     compressorDutyCycles,
@@ -57,6 +54,8 @@ const CompressorDutyCycleChart = ({
             const end = DateTime.fromISO(dutyCycle.endTime);
             return {
               timestamp: (start.toSeconds() + end.toSeconds()) / 2,
+              startTime: start,
+              endTime: end,
               load: Math.round(dutyCycle.load * 100),
               activeCount: dutyCycle.activeCount,
               count: dutyCycle.count,

@@ -5,6 +5,23 @@ export const tickLabelFormatter = (epochSeconds: number, isMobile = false) => {
   if (isMobile) {
     return dt.toFormat("EEE HH:mm");
   }
+  return toLocaleString(dt)
+};
+
+export const tooltipLabelFormatter = (value?: number | string) => {
+  if (value == null) return "";
+  const epochSeconds = typeof value === "string" ? Number(value) : value;
+  if (Number.isNaN(epochSeconds)) return "";
+  return toLocaleString(DateTime.fromSeconds(epochSeconds))
+};
+
+export const tooltipDatetimeRangeFormatter = (start?: DateTime, end?: DateTime) => {
+  if (!start || !end) return "";
+  if (!start.isValid || !end.isValid) return "";
+  return `${toLocaleString(start)} – ${toLocaleString(end)}`;
+};
+
+const toLocaleString = (dt: DateTime) => {
   return dt.toLocaleString({
     weekday: "short",
     day: "numeric",
@@ -12,17 +29,4 @@ export const tickLabelFormatter = (epochSeconds: number, isMobile = false) => {
     minute: "2-digit",
     hourCycle: "h24",
   });
-};
-
-export const tooltipLabelFormatter = (value?: number | string) => {
-  if (value == null) return '';
-  const epochSeconds = typeof value === 'string' ? Number(value) : value;
-  if (Number.isNaN(epochSeconds)) return '';
-  return DateTime.fromSeconds(epochSeconds).toLocaleString({
-    weekday: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h24',
-  });
-};
+}
