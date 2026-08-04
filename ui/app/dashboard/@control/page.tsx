@@ -14,7 +14,7 @@ import {
   IconRectangleRoundedTop,
   IconSun
 } from "@tabler/icons-react";
-import TemperatureCard from "@/app/components/TemperatureCard";
+import TemperatureCard from "@/app/dashboard/@control/components/TemperatureCard";
 
 const DashboardControlPage = async () => {
   const heatingStatePromise = fetchHeatingState();
