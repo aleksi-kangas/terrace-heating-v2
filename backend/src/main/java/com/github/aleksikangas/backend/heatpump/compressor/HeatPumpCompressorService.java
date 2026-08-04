@@ -7,14 +7,19 @@ package com.github.aleksikangas.backend.heatpump.compressor;
 import com.github.aleksikangas.backend.domain.compressor.CompressorDutyCycle;
 import com.github.aleksikangas.backend.persistence.repositories.HeatPumpSnapshotRepository;
 import com.google.common.base.Preconditions;
+import com.google.errorprone.annotations.ThreadSafe;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 @Service
+@ThreadSafe
 public final class HeatPumpCompressorService {
 
   private final HeatPumpSnapshotRepository heatPumpSnapshotRepository;

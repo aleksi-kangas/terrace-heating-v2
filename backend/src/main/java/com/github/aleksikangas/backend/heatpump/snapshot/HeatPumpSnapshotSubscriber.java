@@ -5,6 +5,7 @@
 package com.github.aleksikangas.backend.heatpump.snapshot;
 
 import com.github.aleksikangas.backend.domain.snapshot.HeatPumpSnapshot;
+import com.google.errorprone.annotations.ThreadSafe;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import java.net.URI;
@@ -23,7 +24,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.WebApplicationContext;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.json.JsonMapper;
@@ -32,7 +35,9 @@ import tools.jackson.databind.json.JsonMapper;
  * Subscribes to <code>VMi 9</code> topic on the MQTT broker. Publishes {@link HeatPumpSnapshotEvent}s upon subscription
  * data.
  */
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 @Service
+@ThreadSafe
 public final class HeatPumpSnapshotSubscriber implements MqttCallback {
 
   private static final Logger LOG = LoggerFactory.getLogger(HeatPumpSnapshotSubscriber.class);

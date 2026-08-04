@@ -6,6 +6,7 @@ package com.github.aleksikangas.backend.controller.heatpump.compressor;
 
 import com.github.aleksikangas.backend.domain.compressor.CompressorDutyCycle;
 import com.github.aleksikangas.backend.heatpump.compressor.HeatPumpCompressorService;
+import com.google.errorprone.annotations.ThreadSafe;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import java.time.Duration;
@@ -14,15 +15,19 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.WebApplicationContext;
 
 @RequestMapping("heat-pump/compressor")
 @RestController
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
+@ThreadSafe
 public final class HeatPumpCompressorController {
 
   private final HeatPumpCompressorService heatPumpCompressorService;
