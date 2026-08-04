@@ -5,6 +5,7 @@
 package com.github.aleksikangas.backend.heatpump.client.utils;
 
 import com.github.aleksikangas.backend.heatpump.client.registers.RegisterRange;
+import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +26,17 @@ public record ContiguousRegisterValueRange(RegisterRange registerRange,
   @Override
   public int hashCode() {
     return Objects.hash(registerRange, Arrays.hashCode(values));
+  }
+
+  @Nonnull
+  @Override
+  public String toString() {
+    return "ContiguousRegisterValueRange{" +
+        "registerRange=" +
+        registerRange +
+        ", values=" +
+        Arrays.toString(values) +
+        '}';
   }
 
   public static final class Builder {

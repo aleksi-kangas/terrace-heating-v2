@@ -46,15 +46,13 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
       Integer.parseInt(System.getenv("MQTT_BROKER_PORT"))));
   private static final String VMI_9_TOPIC = "VMi 9";
 
-  private final IMqttClient mqttClient = new MqttClient(
-      SERVER_URI.toString(),
-      CLIENT_ID.toString(),
-      new MemoryPersistence());
   private final ApplicationEventPublisher applicationEventPublisher;
+  private final IMqttClient mqttClient;
 
   public HeatPumpSnapshotSubscriber(@Autowired final ApplicationEventPublisher applicationEventPublisher)
       throws MqttException {
     this.applicationEventPublisher = applicationEventPublisher;
+    this.mqttClient = new MqttClient(SERVER_URI.toString(), CLIENT_ID.toString(), new MemoryPersistence());
     mqttClient.setCallback(this);
   }
 

@@ -12,7 +12,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import org.junit.jupiter.api.Test;
 
-public final class RegisterUtilsTest {
+final class RegisterUtilsTest {
 
   private static final SortedMap<Integer, Short> SORTED_REGISTER_VALUE_MAP = new TreeMap<>();
 
@@ -39,7 +39,7 @@ public final class RegisterUtilsTest {
   }
 
   @Test
-  public void getContiguousRegisterValueRanges_returnsContiguousRegisterValueRanges() {
+  void getContiguousRegisterValueRanges_returnsContiguousRegisterValueRanges() {
     final List<ContiguousRegisterValueRange> result = RegisterUtils.extractContiguousRegisterValueRanges(
         SORTED_REGISTER_VALUE_MAP);
     final List<ContiguousRegisterValueRange> expected = List.of(
