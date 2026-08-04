@@ -57,9 +57,9 @@ public final class HeatPumpCompressorController {
   public ResponseEntity<List<CompressorDutyCycle>> getDutyCyclesTrailingDays(
       @PathVariable @Min(1) @Max(30) final int days,
       @RequestParam(value = "resolution", defaultValue = "PT1H") final Duration resolution) {
-    final Instant threshold = Instant.now().minus(days, ChronoUnit.DAYS);
-    final List<CompressorDutyCycle> dutyCycles = heatPumpCompressorService.getDutyCycles(threshold, Instant.now(),
-        resolution);
+    final Instant now = Instant.now();
+    final Instant threshold = now.minus(days, ChronoUnit.DAYS);
+    final List<CompressorDutyCycle> dutyCycles = heatPumpCompressorService.getDutyCycles(threshold, now, resolution);
     return ResponseEntity.ok(dutyCycles);
   }
 }
