@@ -15,7 +15,7 @@ const DashboardLayout = ({
   return (
       <Grid>
         <GridCol span={{base: 12, lg: 8}}>
-          <Stack h="80vh">
+          <Stack h="90vh">
             <Card withBorder shadow="sm" radius="md" p="xs" style={{flex: 1}}>
               {charts}
             </Card>
@@ -25,7 +25,7 @@ const DashboardLayout = ({
           </Stack>
         </GridCol>
         <GridCol span={{base: 12, lg: 4}}>
-          <Card withBorder shadow="sm" radius="md" p="xs" h={{base: "auto", lg: "80vh"}}>
+          <Card withBorder shadow="sm" radius="md" p="xs" h={{base: "auto", lg: "90vh"}}>
             {control}
           </Card>
         </GridCol>
