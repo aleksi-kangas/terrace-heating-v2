@@ -6,7 +6,7 @@ import {BarChart, ChartTooltip} from '@mantine/charts';
 import {Box, LoadingOverlay} from '@mantine/core';
 import {usePathname, useRouter, useSearchParams} from 'next/navigation';
 import {CompressorDutyCycle, Resolution, RESOLUTIONS} from '@/app/types/compressor';
-import ResolutionSelection from "@/app/components/CompresorDutyCycleResolutionSelection";
+import ResolutionSelection from "@/app/dashboard/@compressor/components/CompresorDutyCycleResolutionSelection";
 import {useMediaQuery} from "@mantine/hooks";
 import {tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
 
@@ -100,51 +100,55 @@ const CompressorDutyCycleChart = ({
   };
 
   return (
-      <Box h="100%" p="xs" m="xs">
+      <Box h="100%" p="0" style={{display: "flex", flexDirection: "column"}}>
         <LoadingOverlay
             visible={isPending}
             zIndex={10}
             overlayProps={{radius: 'sm', blur: 1}}
         />
-        <BarChart
-            barProps={{radius: [10, 10, 0, 0]}}
-            data={data}
-            dataKey="timestamp"
-            h="90%"
-            series={[
-              {
-                name: 'load',
-                label: 'Compressor %',
-                color: 'blue',
-              },
-            ]}
-            tooltipProps={{content: DutyCycleTooltip}}
-            tickLine="xy"
-            withBarValueLabel={true}
-            withLegend={true}
-            xAxisProps={{
-              angle: -60,
-              axisLine: false,
-              domain: xAxisDomain,
-              height: 60,
-              interval: xAxisTickInterval,
-              tickFormatter: (v) => tickLabelFormatter(v, isMobile),
-              tickMargin: 30,
-              ticks: xAxisTicks,
-              type: 'number',
-            }}
-            yAxisProps={{
-              domain: [0, 100],
-              interval: 0,
-              ticks: isMobile ? [0, 20, 40, 60, 80, 100] : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-            }}
-        />
-        <ResolutionSelection
-            selection={resolution}
-            onSelectionChange={handleResolutionChange}
-            values={[...RESOLUTIONS]}
-            disabled={isPending}
-        />
+        <Box p="0" style={{flex: 1, minHeight: 0}}>
+          <BarChart
+              barProps={{radius: [10, 10, 0, 0]}}
+              data={data}
+              dataKey="timestamp"
+              h="90%"
+              series={[
+                {
+                  name: 'load',
+                  label: 'Compressor %',
+                  color: 'blue',
+                },
+              ]}
+              tooltipProps={{content: DutyCycleTooltip}}
+              tickLine="xy"
+              withBarValueLabel={true}
+              withLegend={true}
+              xAxisProps={{
+                angle: -60,
+                axisLine: false,
+                domain: xAxisDomain,
+                height: 40,
+                interval: xAxisTickInterval,
+                tickFormatter: (v) => tickLabelFormatter(v, isMobile),
+                tickMargin: 30,
+                ticks: xAxisTicks,
+                type: 'number',
+              }}
+              yAxisProps={{
+                domain: [0, 100],
+                interval: 0,
+                ticks: isMobile ? [0, 20, 40, 60, 80, 100] : [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+              }}
+          />
+        </Box>
+        <Box p="0">
+          <ResolutionSelection
+              selection={resolution}
+              onSelectionChange={handleResolutionChange}
+              values={[...RESOLUTIONS]}
+              disabled={isPending}
+          />
+        </Box>
       </Box>
   );
 };

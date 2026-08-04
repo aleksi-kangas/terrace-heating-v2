@@ -1,5 +1,5 @@
 import {fetchCompressorDutyCyclesTrailingDays} from "@/app/api/heat-pump/compressor";
-import CompressorDutyCycleChart from "@/app/components/CompressorDutyCycleChart";
+import CompressorDutyCycleChart from "@/app/dashboard/@compressor/components/CompressorDutyCycleChart";
 import {parseResolution} from "@/app/types/compressor";
 
 const DEFAULT_TRAILING_DAYS = 2;
