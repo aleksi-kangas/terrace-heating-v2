@@ -23,19 +23,19 @@ const DashboardControlPage = async () => {
   const heatingActive: boolean = heatingState === HeatingState.ACTIVE
   return (
       <Stack align="center" gap="xl" h="100%" justify="center">
-        <Stack align="center" gap="xl" justify="center">
+        <Stack align="center" gap="md" justify="center">
           <ThemeIcon
-              size={64}
-              radius="xl"
-              variant="light"
               color={heatingActive ? "orange" : "gray"}
+              radius="xl"
+              size={48}
+              variant="light"
           >
-            <IconFlame size={34}/>
+            <IconFlame size={24}/>
           </ThemeIcon>
           <Title order={1}>Heating</Title>
           <Switch
               checked={heatingActive}
-              size="xl"
+              size="lg"
               color="green"
               onLabel="ON"
               offLabel="OFF"
