@@ -8,7 +8,7 @@ import DaysSelection from "./DaysSelection";
 import {chartRegistry, ChartSelection as ChartSelectionType,} from "./chart-registry";
 
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
-import {Card, LoadingOverlay, Stack} from "@mantine/core";
+import {Box, Card, LoadingOverlay, Stack} from "@mantine/core";
 import {usePathname, useRouter} from "next/navigation";
 
 const availableCharts = [
@@ -45,15 +45,17 @@ const ChartsPanel = ({heatPumpSnapshots, trailingDays}: ChartsPanelProps) => {
             onSelectionChange={(value) => setChartSelection(value as ChartSelectionType)}
             values={availableCharts}
         />
-        <Card p="0" radius="md" shadow="sm" withBorder style={{flex: 1, minHeight: 0}}>
-          <LoadingOverlay visible={isPending} zIndex={10} overlayProps={{radius: "md", blur: 1}}/>
-          <SelectedChart
-              heatPumpSnapshots={heatPumpSnapshots}
-              series={selectedChart.series}
-              xAxisProps={{
-                domainTrailingDays: trailingDays,
-              }}
-          />
+        <Card radius="md" shadow="sm" withBorder style={{flex: 1, minHeight: 0}}>
+          <Box h="100%" p="xs">
+            <LoadingOverlay visible={isPending} zIndex={10} overlayProps={{radius: "md", blur: 1}}/>
+            <SelectedChart
+                heatPumpSnapshots={heatPumpSnapshots}
+                series={selectedChart.series}
+                xAxisProps={{
+                  domainTrailingDays: trailingDays,
+                }}
+            />
+          </Box>
         </Card>
         <DaysSelection
             selection={String(trailingDays)}

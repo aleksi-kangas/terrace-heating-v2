@@ -4,7 +4,6 @@ import {useMemo} from "react";
 import {DateTime} from "luxon";
 import {ChartTooltip, LineChart} from "@mantine/charts";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
-import {Box} from "@mantine/core";
 import {useMediaQuery} from "@mantine/hooks";
 import {tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
 
@@ -71,31 +70,29 @@ const GenericTemperatureChart = ({
   }, [xAxisDomain]);
 
   return (
-      <Box h="100%" p="xs" m="xs">
-        <LineChart
-            data={data}
-            dataKey="timestamp"
-            h="100%"
-            series={series}
-            tickLine="xy"
-            tooltipProps={{content: tooltipContent}}
-            unit="°C"
-            withDots={false}
-            withLegend={true}
-            withTooltip={true}
-            xAxisProps={{
-              angle: -60,
-              axisLine: false,
-              domain: xAxisDomain,
-              height: 60,
-              interval: xAxisTickInterval,
-              tickFormatter: (v) => tickLabelFormatter(v, isMobile),
-              tickMargin: 30,
-              ticks: xAxisTicks,
-              type: "number"
-            }}
-        />
-      </Box>
+      <LineChart
+          data={data}
+          dataKey="timestamp"
+          h="100%"
+          series={series}
+          tickLine="xy"
+          tooltipProps={{content: tooltipContent}}
+          unit="°C"
+          withDots={false}
+          withLegend={true}
+          withTooltip={true}
+          xAxisProps={{
+            angle: -60,
+            axisLine: false,
+            domain: xAxisDomain,
+            height: 60,
+            interval: xAxisTickInterval,
+            tickFormatter: (v) => tickLabelFormatter(v, isMobile),
+            tickMargin: 30,
+            ticks: xAxisTicks,
+            type: "number"
+          }}
+      />
   )
 }
 
