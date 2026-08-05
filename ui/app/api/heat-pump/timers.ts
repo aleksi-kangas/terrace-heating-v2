@@ -23,5 +23,9 @@ export const putTimerSchedule = async (timerType: TimerType, timerSchedule: Time
       timerSchedule: timerSchedule,
     })
   });
+  if (!response.ok) {
+    const message = await response.text();
+    throw new Error(message);
+  }
   return await response.json();
 }

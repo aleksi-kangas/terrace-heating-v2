@@ -5,7 +5,9 @@ import TimerScheduleCard from "@/app/timers/components/TimerScheduleCard";
 const Circuit3TimersPage = async () => {
   const heatDistributionCircuit3TimerSchedule = await fetchTimerSchedule(TimerType.HEAT_DISTRIBUTION_CIRCUIT_3);
   return (
-      <TimerScheduleCard title={"Heat Distribution Circuit 3"} timerSchedule={heatDistributionCircuit3TimerSchedule} />
+      <TimerScheduleCard title={"Heat Distribution Circuit 3"}
+                         timerType={TimerType.HEAT_DISTRIBUTION_CIRCUIT_3}
+                         timerSchedule={heatDistributionCircuit3TimerSchedule}/>
   )
 }
 

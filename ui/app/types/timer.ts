@@ -8,24 +8,12 @@ export interface TimerSchedule {
   sundaySchedule: WeekdaySchedule;
 }
 
-export const getWeekdaySchedule = (timerSchedule: TimerSchedule, weekday: Weekday): WeekdaySchedule => {
-  switch (weekday) {
-    case Weekday.MONDAY:
-      return timerSchedule.mondaySchedule;
-    case Weekday.TUESDAY:
-      return timerSchedule.tuesdaySchedule;
-    case Weekday.WEDNESDAY:
-      return timerSchedule.wednesdaySchedule;
-    case Weekday.THURSDAY:
-      return timerSchedule.thursdaySchedule;
-    case Weekday.FRIDAY:
-      return timerSchedule.fridaySchedule;
-    case Weekday.SATURDAY:
-      return timerSchedule.saturdaySchedule;
-    case Weekday.SUNDAY:
-      return timerSchedule.sundaySchedule;
-  }
-}
+export const getWeekdaySchedule = (
+    timerSchedule: TimerSchedule,
+    weekday: Weekday
+): WeekdaySchedule => {
+  return timerSchedule[WEEKDAY_KEYS[weekday]];
+};
 
 export enum TimerType {
   HEAT_DISTRIBUTION_CIRCUIT_1,
@@ -44,6 +32,16 @@ export enum Weekday {
   SATURDAY,
   SUNDAY
 }
+
+export const WEEKDAY_KEYS: Record<Weekday, keyof TimerSchedule> = {
+  [Weekday.MONDAY]: "mondaySchedule",
+  [Weekday.TUESDAY]: "tuesdaySchedule",
+  [Weekday.WEDNESDAY]: "wednesdaySchedule",
+  [Weekday.THURSDAY]: "thursdaySchedule",
+  [Weekday.FRIDAY]: "fridaySchedule",
+  [Weekday.SATURDAY]: "saturdaySchedule",
+  [Weekday.SUNDAY]: "sundaySchedule",
+};
 
 export interface WeekdaySchedule {
   startHour: number;

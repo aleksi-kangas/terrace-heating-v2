@@ -5,7 +5,8 @@ import TimerScheduleCard from "@/app/timers/components/TimerScheduleCard";
 const LowerTankTimersPage = async () => {
   const lowerTankTimerSchedule = await fetchTimerSchedule(TimerType.LOWER_STORAGE_TANK);
   return (
-      <TimerScheduleCard title={"Lower Storage Tank"} timerSchedule={lowerTankTimerSchedule} />
+      <TimerScheduleCard title={"Lower Storage Tank"} timerType={TimerType.LOWER_STORAGE_TANK}
+                         timerSchedule={lowerTankTimerSchedule}/>
   )
 }
 
