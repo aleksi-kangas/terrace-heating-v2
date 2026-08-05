@@ -8,6 +8,7 @@ import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Core backend application configuration.
@@ -15,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {"com.github.aleksikangas.backend.*"})
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.github.aleksikangas.backend.*"})
+@EnableScheduling
 @EntityScan(basePackages = {"com.github.aleksikangas.backend.*"})
 public class BackendConfiguration {
 

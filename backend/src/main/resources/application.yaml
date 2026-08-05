@@ -1,3 +1,6 @@
+heat-pump:
+  retention:
+    snapshot-retention: 30d
 spring:
   application:
     name: backend

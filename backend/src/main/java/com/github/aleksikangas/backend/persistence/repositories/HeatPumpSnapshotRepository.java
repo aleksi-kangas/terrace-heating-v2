@@ -10,6 +10,7 @@ import jakarta.annotation.Nonnull;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -50,4 +51,11 @@ public interface HeatPumpSnapshotRepository extends JpaRepository<HeatPumpSnapsh
       """, nativeQuery = true)
   List<CompressorDutyCycle> findDutyCycles(@Param("from") Instant from, @Param("to") Instant to,
       @Param("interval") String interval);
+
+  @Modifying
+  @Query(value = """
+      DELETE FROM heat_pump_snapshots
+      WHERE timestamp < :threshold
+      """, nativeQuery = true)
+  int deleteAllBefore(@Param("threshold") Instant threshold);
 }
