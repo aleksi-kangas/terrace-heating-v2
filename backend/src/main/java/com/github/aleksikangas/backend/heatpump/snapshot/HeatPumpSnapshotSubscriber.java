@@ -24,9 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 import tools.jackson.core.exc.StreamReadException;
 import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.json.JsonMapper;
@@ -35,7 +33,6 @@ import tools.jackson.databind.json.JsonMapper;
  * Subscribes to <code>VMi 9</code> topic on the MQTT broker. Publishes {@link HeatPumpSnapshotEvent}s upon subscription
  * data.
  */
-@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 @Service
 @ThreadSafe
 public final class HeatPumpSnapshotSubscriber implements MqttCallback {
@@ -43,7 +40,6 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
   private static final Logger LOG = LoggerFactory.getLogger(HeatPumpSnapshotSubscriber.class);
 
   private static final UUID CLIENT_ID = UUID.randomUUID();
-  private static final MqttConnectionOptions CONNECTION_OPTIONS = new MqttConnectionOptions();
   private static final JsonMapper JSON_MAPPER = new JsonMapper();
   private static final int QOS_0 = 0;
   private static final URI SERVER_URI = URI.create(String.format("tcp://%s:%d",
@@ -63,7 +59,9 @@ public final class HeatPumpSnapshotSubscriber implements MqttCallback {
 
   @PostConstruct
   public void postConstruct() throws MqttException {
-    mqttClient.connect(CONNECTION_OPTIONS);
+    final var connectionOptions = new MqttConnectionOptions();
+    connectionOptions.setAutomaticReconnect(true);
+    mqttClient.connect(connectionOptions);
     mqttClient.subscribe(VMI_9_TOPIC, QOS_0);
   }
 
