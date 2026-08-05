@@ -6,8 +6,11 @@ COPY . .
 RUN npm run build
 
 FROM node:26-slim
+ENV NODE_ENV=production
 WORKDIR /app
-COPY --from=build --chown=node:node /app ./
+COPY --from=build /app/.next/standalone ./
+COPY --from=build /app/public ./public
+COPY --from=build /app/.next/static ./.next/static
 USER node
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["node", "server.js"]
