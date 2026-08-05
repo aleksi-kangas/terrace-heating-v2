@@ -1,6 +1,5 @@
 .git
 .gitignore
 .idea
-.next
 Dockerfile
-node_modules
+target
