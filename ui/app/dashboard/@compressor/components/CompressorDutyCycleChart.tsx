@@ -9,6 +9,7 @@ import {CompressorDutyCycle, Resolution, RESOLUTIONS} from '@/app/types/compress
 import ResolutionSelection from "@/app/dashboard/@compressor/components/CompresorDutyCycleResolutionSelection";
 import {useMediaQuery} from "@mantine/hooks";
 import {tickLabelFormatter, tooltipDatetimeRangeFormatter} from "@/app/utils/chart-formatters";
+import {TooltipContentProps} from "recharts";
 
 interface XAxisProps {
   domainTrailingDays: number;
@@ -20,12 +21,12 @@ interface CompressorDutyCycleChartProps {
   xAxisProps: XAxisProps;
 }
 
-const DutyCycleTooltip = ({payload}: { payload?: readonly Record<string, any>[]; }) => {
+const DutyCycleTooltip = ({payload}: TooltipContentProps) => {
   const point = payload?.[0]?.payload;
   return (
       <ChartTooltip
           label={tooltipDatetimeRangeFormatter(point?.startTime, point?.endTime)}
-          payload={payload as any}
+          payload={payload}
           series={[
             {
               name: 'load',

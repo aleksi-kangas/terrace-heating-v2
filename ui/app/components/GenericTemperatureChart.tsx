@@ -6,6 +6,7 @@ import {ChartTooltip, LineChart} from "@mantine/charts";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {useMediaQuery} from "@mantine/hooks";
 import {tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
+import {TooltipContentProps} from "recharts";
 
 interface SeriesItem {
   name: string;
@@ -31,7 +32,7 @@ const GenericTemperatureChart = ({
   const isMobile = useMediaQuery("(max-width: 48em)");
 
   const data = useMemo(() =>
-          heatPumpSnapshots.map((heatPumpSnapshot, index) => ({
+          heatPumpSnapshots.map((heatPumpSnapshot) => ({
             timestamp: DateTime.fromISO(heatPumpSnapshot.timestamp).toSeconds(),
             ...heatPumpSnapshot.temperatureSnapshot
           })),
@@ -99,12 +100,9 @@ const GenericTemperatureChart = ({
 export default GenericTemperatureChart;
 
 const createTemperatureTooltip = (series: SeriesItem[]) => {
-  const TemperatureTooltip = ({label, payload}: {
-    label?: string | number;
-    payload?: readonly Record<string, any>[];
-  }) => (
+  const TemperatureTooltip = ({payload, label}: TooltipContentProps) => (
       <ChartTooltip
-          label={tooltipLabelFormatter(label as number | string | undefined)}
+          label={tooltipLabelFormatter(label)}
           payload={payload}
           series={series}
       />
