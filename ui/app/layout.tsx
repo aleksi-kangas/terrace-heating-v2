@@ -11,6 +11,7 @@ import {
   mantineHtmlProps,
   MantineProvider
 } from '@mantine/core';
+import {Notifications} from '@mantine/notifications';
 import React from "react";
 import NavBar from './components/NavBar';
 
@@ -26,6 +27,7 @@ const RootLayout = ({children}: Readonly<{ children: React.ReactNode }>) => {
       </head>
       <body>
       <MantineProvider>
+        <Notifications/>
         <AppShell header={{height: 60}} padding={{base: "xs", sm: "sm"}}>
           <AppShellHeader>
             <NavBar/>
