@@ -11,6 +11,7 @@ import com.github.aleksikangas.backend.utils.TemperatureUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
@@ -31,7 +32,8 @@ import org.springframework.data.annotation.Immutable;
 @Getter
 @Immutable
 @NoArgsConstructor
-@Table(name = "heat_pump_snapshots")
+@Table(name = "heat_pump_snapshots", indexes = {
+    @Index(name = "heat_pump_snapshots_timestamp_index", columnList = "timestamp")})
 public class HeatPumpSnapshot extends AbstractEntity {
 
   @Column(nullable = false, updatable = false)
