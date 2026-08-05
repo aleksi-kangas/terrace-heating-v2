@@ -13,11 +13,11 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 /**
  * Core backend application configuration.
  */
-@ComponentScan(basePackages = {"com.github.aleksikangas.backend.*"})
+@ComponentScan(basePackages = {"com.github.aleksikangas.backend"})
 @Configuration
-@EnableJpaRepositories(basePackages = {"com.github.aleksikangas.backend.*"})
+@EnableJpaRepositories(basePackages = {"com.github.aleksikangas.backend"})
 @EnableScheduling
-@EntityScan(basePackages = {"com.github.aleksikangas.backend.*"})
+@EntityScan(basePackages = {"com.github.aleksikangas.backend"})
 public class BackendConfiguration {
 
 }
