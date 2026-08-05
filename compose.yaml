@@ -5,6 +5,7 @@ services:
     container_name: backend
     depends_on:
       - database
+      - modpoll
       - mqtt-broker
     env_file:
       - .env
