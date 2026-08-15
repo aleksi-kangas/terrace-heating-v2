@@ -1,4 +1,4 @@
-import {SimpleGrid, Stack, Switch, ThemeIcon, Title} from "@mantine/core";
+import {SimpleGrid, Stack, ThemeIcon, Title} from "@mantine/core";
 import {fetchHeatingState} from "@/app/api/heat-pump/heating";
 import {HeatingState} from "@/app/types/heating";
 import {fetchTemperatureSnapshot} from "@/app/api/heat-pump/temperatures";
@@ -15,17 +15,18 @@ import {
   IconSun
 } from "@tabler/icons-react";
 import TemperatureCard from "@/app/dashboard/@control/components/TemperatureCard";
+import HeatingSwitch from "@/app/dashboard/@control/components/HeatingSwitch";
 
 const DashboardControlPage = async () => {
   const heatingStatePromise = fetchHeatingState();
   const temperatureSnapshotPromise = fetchTemperatureSnapshot();
   const [heatingState, temperatureSnapshot] = await Promise.all([heatingStatePromise, temperatureSnapshotPromise])
-  const heatingActive: boolean = heatingState === HeatingState.ACTIVE
+
   return (
       <Stack align="center" gap="xl" h="100%" justify="center">
         <Stack align="center" gap="md" justify="center">
           <ThemeIcon
-              color={heatingActive ? "orange" : "gray"}
+              color="orange"
               radius="xl"
               size={48}
               variant="light"
@@ -33,13 +34,7 @@ const DashboardControlPage = async () => {
             <IconFlame size={24}/>
           </ThemeIcon>
           <Title order={1}>Heating</Title>
-          <Switch
-              checked={heatingActive}
-              size="lg"
-              color="green"
-              onLabel="ON"
-              offLabel="OFF"
-          />
+          <HeatingSwitch initialState={heatingState}/>
         </Stack>
         <SimpleGrid cols={{base: 2, sm: 3}} spacing="md">
           <TemperatureCard
