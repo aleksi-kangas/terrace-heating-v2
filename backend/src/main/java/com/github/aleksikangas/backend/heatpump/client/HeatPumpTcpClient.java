@@ -16,8 +16,13 @@ import com.github.aleksikangas.backend.heatpump.client.registers.TemperatureRegi
 import com.github.aleksikangas.backend.heatpump.client.registers.TimerRegisters;
 import com.github.aleksikangas.backend.heatpump.client.utils.RegisterUtils;
 import com.google.errorprone.annotations.ThreadSafe;
+import com.google.errorprone.annotations.concurrent.GuardedBy;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.util.SortedMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.solarnetwork.io.modbus.ModbusClient;
 import net.solarnetwork.io.modbus.ModbusException;
 import net.solarnetwork.io.modbus.netty.msg.BitsModbusMessage;
@@ -27,15 +32,11 @@ import net.solarnetwork.io.modbus.tcp.netty.NettyTcpModbusClientConfig;
 import net.solarnetwork.io.modbus.tcp.netty.TcpNettyModbusClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.WebApplicationContext;
 
 /**
  * A Modbus TCP implementation of {@link HeatPumpClient}.
  */
-@Scope(value = WebApplicationContext.SCOPE_REQUEST, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Service
 @ThreadSafe
 public class HeatPumpTcpClient implements HeatPumpClient {
@@ -45,107 +46,110 @@ public class HeatPumpTcpClient implements HeatPumpClient {
   private static final Logger LOG = LoggerFactory.getLogger(HeatPumpTcpClient.class);
   private static final int UNIT_ID = 1;
 
+  private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+  @GuardedBy("readWriteLock")
   private final ModbusClient client = new TcpNettyModbusClient(CONFIG);
+
+  @PostConstruct
+  private void postConstruct() {
+    try {
+      client.start().get();
+      LOG.debug("Modbus client started successfully");
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new HeatPumpClientException(e);
+    } catch (final ExecutionException e) {
+      throw new HeatPumpClientException(e);
+    }
+  }
+
+  @PreDestroy
+  private void preDestroy() {
+    LOG.debug("Stopping Modbus client");
+    client.stop();
+  }
 
   @Override
   public short readActiveHeatDistributionCircuitCount() {
     try {
-      client.start().get();
+      readWriteLock.readLock().lock();
       final short[] registerValues = readHoldingRegisterRange(
           RegisterRange.of(HeatingRegisters.ACTIVE_HEAT_DISTRIBUTION_CIRCUIT_COUNT));
       if (registerValues.length != 1) {
         throw new HeatPumpClientException("Failed to read active heat distribution circuit count");
       }
       return registerValues[0];
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.readLock().unlock();
     }
   }
 
   @Override
   public void writeActiveHeatDistributionCircuitCount(final short activeHeatDistributionCircuitCount) {
     try {
-      client.start().get();
+      readWriteLock.writeLock().lock();
       writeHoldingRegisterRange(RegisterRange.of(HeatingRegisters.ACTIVE_HEAT_DISTRIBUTION_CIRCUIT_COUNT),
           new short[]{activeHeatDistributionCircuitCount});
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.writeLock().unlock();
     }
   }
 
   @Override
   public TemperatureSnapshot readTemperatureSnapshot() {
     try {
-      client.start().get();
+      readWriteLock.readLock().lock();
       final short[] temperatureValues = readHoldingRegisterRange(TemperatureRegisters.getRegisterRange());
       return TemperatureSnapshotParser.parse(temperatureValues);
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.readLock().unlock();
     }
   }
 
   @Override
   public boolean readTimersInUse() {
     try {
-      client.start().get();
+      readWriteLock.readLock().lock();
       return readCoil(HeatingCoils.TIMERS_IN_USE);
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.readLock().unlock();
     }
   }
 
   @Override
   public void writeTimersInUse(final boolean timersInUse) {
     try {
-      client.start().get();
+      readWriteLock.writeLock().lock();
       writeCoil(HeatingCoils.TIMERS_IN_USE, timersInUse);
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.writeLock().unlock();
     }
   }
 
   @Override
   public TimerSchedule readTimerSchedule(final TimerType timerType) {
     try {
-      client.start().get();
+      readWriteLock.readLock().lock();
       final TimerRegisters timerRegisters = TimerRegisters.of(timerType);
       final RegisterRange startEndHourRegisterRange = timerRegisters.getStartEndHourRegisterRange();
       final RegisterRange temperatureDeltaRegisterRange = timerRegisters.getTemperatureDeltaRegisterRange();
       final short[] startHourEndHourValues = readHoldingRegisterRange(startEndHourRegisterRange);
       final short[] temperatureDeltaValues = readHoldingRegisterRange(temperatureDeltaRegisterRange);
       return TimerScheduleParser.parse(timerType, startHourEndHourValues, temperatureDeltaValues);
-    } catch (final ExecutionException | ModbusException e) {
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.readLock().unlock();
     }
   }
 
@@ -163,18 +167,14 @@ public class HeatPumpTcpClient implements HeatPumpClient {
   @Override
   public void writeTimerSchedule(final TimerType timerType, final TimerSchedule timerSchedule) {
     try {
-      client.start().get();
+      readWriteLock.writeLock().lock();
       final SortedMap<Integer, Short> registerValueMap = RegisterUtils.buildRegisterValueMap(timerType, timerSchedule);
       RegisterUtils.extractContiguousRegisterValueRanges(registerValueMap)
           .forEach(c -> writeHoldingRegisterRange(c.registerRange(), c.values()));
-    } catch (final ExecutionException | ModbusException e) {
-      LOG.error("Failed to write timer schedule", e);
-      throw new HeatPumpClientException(e);
-    } catch (final InterruptedException e) {
-      Thread.currentThread().interrupt();
+    } catch (final ModbusException e) {
       throw new HeatPumpClientException(e);
     } finally {
-      client.stop();
+      readWriteLock.writeLock().unlock();
     }
   }
 
