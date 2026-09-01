@@ -1,6 +1,5 @@
 import {SimpleGrid, Stack, ThemeIcon, Title} from "@mantine/core";
 import {fetchHeatingState} from "@/app/api/heat-pump/heating";
-import {HeatingState} from "@/app/types/heating";
 import {fetchTemperatureSnapshot} from "@/app/api/heat-pump/temperatures";
 import {
   IconArrowDown,
@@ -15,7 +14,7 @@ import {
   IconSun
 } from "@tabler/icons-react";
 import TemperatureCard from "@/app/dashboard/@control/components/TemperatureCard";
-import HeatingSwitch from "@/app/dashboard/@control/components/HeatingSwitch";
+import HeatingSwitches from "@/app/dashboard/@control/components/HeatingSwitches";
 
 const DashboardControlPage = async () => {
   const heatingStatePromise = fetchHeatingState();
@@ -34,7 +33,7 @@ const DashboardControlPage = async () => {
             <IconFlame size={24}/>
           </ThemeIcon>
           <Title order={1}>Heating</Title>
-          <HeatingSwitch initialState={heatingState}/>
+          <HeatingSwitches initialState={heatingState}/>
         </Stack>
         <SimpleGrid cols={{base: 2, sm: 3}} spacing="md">
           <TemperatureCard

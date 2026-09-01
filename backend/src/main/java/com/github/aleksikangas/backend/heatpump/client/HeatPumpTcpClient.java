@@ -7,6 +7,7 @@ package com.github.aleksikangas.backend.heatpump.client;
 import com.github.aleksikangas.backend.domain.snapshot.TemperatureSnapshot;
 import com.github.aleksikangas.backend.domain.timer.TimerSchedule;
 import com.github.aleksikangas.backend.domain.timer.TimerType;
+import com.github.aleksikangas.backend.heatpump.client.coils.HeatingCoils;
 import com.github.aleksikangas.backend.heatpump.client.parsers.TemperatureSnapshotParser;
 import com.github.aleksikangas.backend.heatpump.client.parsers.TimerScheduleParser;
 import com.github.aleksikangas.backend.heatpump.client.registers.HeatingRegisters;
@@ -19,6 +20,7 @@ import java.util.SortedMap;
 import java.util.concurrent.ExecutionException;
 import net.solarnetwork.io.modbus.ModbusClient;
 import net.solarnetwork.io.modbus.ModbusException;
+import net.solarnetwork.io.modbus.netty.msg.BitsModbusMessage;
 import net.solarnetwork.io.modbus.netty.msg.RegistersModbusMessage;
 import net.solarnetwork.io.modbus.tcp.TcpModbusClientConfig;
 import net.solarnetwork.io.modbus.tcp.netty.NettyTcpModbusClientConfig;
@@ -98,6 +100,36 @@ public class HeatPumpTcpClient implements HeatPumpClient {
   }
 
   @Override
+  public boolean readTimersInUse() {
+    try {
+      client.start().get();
+      return readCoil(HeatingCoils.TIMERS_IN_USE);
+    } catch (final ExecutionException | ModbusException e) {
+      throw new HeatPumpClientException(e);
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new HeatPumpClientException(e);
+    } finally {
+      client.stop();
+    }
+  }
+
+  @Override
+  public void writeTimersInUse(final boolean timersInUse) {
+    try {
+      client.start().get();
+      writeCoil(HeatingCoils.TIMERS_IN_USE, timersInUse);
+    } catch (final ExecutionException | ModbusException e) {
+      throw new HeatPumpClientException(e);
+    } catch (final InterruptedException e) {
+      Thread.currentThread().interrupt();
+      throw new HeatPumpClientException(e);
+    } finally {
+      client.stop();
+    }
+  }
+
+  @Override
   public TimerSchedule readTimerSchedule(final TimerType timerType) {
     try {
       client.start().get();
@@ -124,7 +156,7 @@ public class HeatPumpTcpClient implements HeatPumpClient {
    * @param timerSchedule to write
    * @throws HeatPumpClientException on failure
    * @implNote Implemented as multiple write operations, each writing contiguous address ranges at once. The overall
-   * write operations is not transacted, i.e. may partially fail. If any of the writing operations fails, the overall
+   * write operations are not transacted, i.e. may partially fail. If any of the writing operations fails, the overall
    * operation is not continued, and the resulting state shall equal to the intersection of the original state and the
    * succeeded write operations.
    */
@@ -159,8 +191,23 @@ public class HeatPumpTcpClient implements HeatPumpClient {
 
   private void writeHoldingRegisterRange(final RegisterRange registerRange, final short[] registerValues)
       throws ModbusException {
-    final RegistersModbusMessage request = RegistersModbusMessage.writeHoldingsRequest(UNIT_ID,
-        registerRange.startRegister(), registerValues);
+    final var request = RegistersModbusMessage.writeHoldingsRequest(UNIT_ID,
+        registerRange.startRegister(),
+        registerValues);
+    client.send(request);
+  }
+
+  private boolean readCoil(final int coilAddress) {
+    final var request = BitsModbusMessage.readCoilsRequest(UNIT_ID, coilAddress, 1);
+    final var bitsModbusMessageResponse = client.send(request).unwrap(BitsModbusMessage.class);
+    if (bitsModbusMessageResponse == null) {
+      throw new ModbusException("Failed to unwrap Modbus message as BitsModbusMessage");
+    }
+    return bitsModbusMessageResponse.isBitEnabled(0);
+  }
+
+  private void writeCoil(final int coilAddress, final boolean value) {
+    final var request = BitsModbusMessage.writeCoilRequest(UNIT_ID, coilAddress, value);
     client.send(request);
   }
 }

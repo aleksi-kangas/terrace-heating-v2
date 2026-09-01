@@ -38,6 +38,20 @@ public interface HeatPumpClient {
   TemperatureSnapshot readTemperatureSnapshot();
 
   /**
+   * Read the bit indicating if timers are in use.
+   *
+   * @return true if timers are in use, false otherwise
+   */
+  boolean readTimersInUse();
+
+  /**
+   * Write the bit indicating if timers are in use.
+   *
+   * @param timersInUse true to denote that timers are in use, false otherwise
+   */
+  void writeTimersInUse(boolean timersInUse);
+
+  /**
    * Read the {@link TimerSchedule} for the given {@link TimerType}.
    *
    * @param timerType of interest
