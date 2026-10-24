@@ -1,6 +1,6 @@
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {fetchHeatPumpSnapshotsTrailingDays} from "@/app/api/heat-pump/snapshots";
-import GenericTemperatureChart from "@/app/components/GenericTemperatureChart";
+import GenericTemperatureChart, {SeriesItem} from "@/app/components/GenericTemperatureChart";
 import {Box} from "@mantine/core";
 
 const DEFAULT_TRAILING_DAYS = 2;
@@ -21,18 +21,29 @@ const DashboardChartsPage = async ({searchParams}: DashboardChartsPageProps) => 
   return (
       <Box h="100%" p="xs">
         <GenericTemperatureChart heatPumpSnapshots={heatPumpSnapshots} series={temperatureSeries}
-                                 xAxisProps={{domainTrailingDays: trailingDays}}/>
+                                 xAxisProps={{domainTrailingDays: trailingDays}}
+                                 yAxisProps={{
+                                   domain: ["auto", "auto"],
+                                   label: "Outdoor",
+                                   tickCount: 10,
+                                 }}
+                                 rightYAxisProps={{
+                                   domain: ["auto", "auto"],
+                                   label: "Indoor",
+                                   tickCount: 10,
+                                 }}/>
       </Box>
   )
 }
 
 export default DashboardChartsPage;
 
-const temperatureSeries = [
+const temperatureSeries: SeriesItem[] = [
   {
     name: "indoorC",
     label: "Indoor °C",
-    color: "green"
+    color: "green",
+    yAxisId: "right"
   },
   {
     name: "outdoorC",

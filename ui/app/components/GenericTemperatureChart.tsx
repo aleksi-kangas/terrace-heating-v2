@@ -5,29 +5,42 @@ import {DateTime} from "luxon";
 import {ChartTooltip, LineChart} from "@mantine/charts";
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {useMediaQuery} from "@mantine/hooks";
-import {tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
+import {roundingTickLabelFormatter, tickLabelFormatter, tooltipLabelFormatter} from "@/app/utils/chart-formatters";
 import {TooltipContentProps} from "recharts";
+import {AxisDomain} from "recharts/types/util/types";
 
-interface SeriesItem {
+export interface SeriesItem {
   name: string;
   label: string;
   color: string;
+  yAxisId?: "left" | "right";
 }
 
-interface XAxisProps {
+export interface XAxisProps {
   domainTrailingDays: number;
+}
+
+export interface YAxisProps {
+  allowDataOverflow?: boolean;
+  domain?: AxisDomain;
+  label?: string;
+  tickCount?: number;
 }
 
 interface GenericTemperatureChartProps {
   heatPumpSnapshots: HeatPumpSnapshot[]
   series: SeriesItem[];
   xAxisProps: XAxisProps;
+  yAxisProps?: YAxisProps;
+  rightYAxisProps?: YAxisProps;
 }
 
 const GenericTemperatureChart = ({
                                    heatPumpSnapshots,
                                    series,
-                                   xAxisProps
+                                   xAxisProps,
+                                   yAxisProps,
+                                   rightYAxisProps
                                  }: GenericTemperatureChartProps) => {
   const isMobile = useMediaQuery("(max-width: 48em)");
 
@@ -74,6 +87,7 @@ const GenericTemperatureChart = ({
       <LineChart
           data={data}
           dataKey="timestamp"
+          gridAxis="xy"
           h="100%"
           series={series}
           tickLine="xy"
@@ -81,6 +95,7 @@ const GenericTemperatureChart = ({
           unit="°C"
           withDots={false}
           withLegend={true}
+          withRightYAxis={!!rightYAxisProps}
           withTooltip={true}
           xAxisProps={{
             angle: -60,
@@ -91,6 +106,26 @@ const GenericTemperatureChart = ({
             tickFormatter: (v) => tickLabelFormatter(v, isMobile),
             tickMargin: 30,
             ticks: xAxisTicks,
+            type: "number",
+          }}
+          yAxisLabel={yAxisProps?.label}
+          yAxisProps={{
+            allowDataOverflow: yAxisProps?.allowDataOverflow,
+            axisLine: false,
+            domain: yAxisProps?.domain,
+            tickCount: yAxisProps?.tickCount,
+            tickFormatter: roundingTickLabelFormatter,
+            tickMargin: 0,
+            type: "number",
+          }}
+          rightYAxisLabel={rightYAxisProps?.label}
+          rightYAxisProps={{
+            allowDataOverflow: rightYAxisProps?.allowDataOverflow,
+            axisLine: false,
+            domain: rightYAxisProps?.domain,
+            tickCount: rightYAxisProps?.tickCount,
+            tickFormatter: roundingTickLabelFormatter,
+            tickMargin: 0,
             type: "number"
           }}
       />

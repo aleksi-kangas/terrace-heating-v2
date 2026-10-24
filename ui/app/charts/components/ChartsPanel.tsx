@@ -5,7 +5,7 @@ import {useState, useTransition} from "react";
 import ChartSelection from "./ChartSelection";
 import DaysSelection from "./DaysSelection";
 
-import {chartRegistry, ChartSelection as ChartSelectionType,} from "./chart-registry";
+import {ChartRegistryConfig, chartRegistry, ChartRegistry, ChartRegistryKey,} from "./chart-registry";
 
 import {HeatPumpSnapshot} from "@/app/types/snapshot";
 import {Box, Card, LoadingOverlay, Stack} from "@mantine/core";
@@ -32,17 +32,17 @@ const ChartsPanel = ({heatPumpSnapshots, trailingDays}: ChartsPanelProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [chartSelection, setChartSelection] = useState<ChartSelectionType>("external");
+  const [chartSelection, setChartSelection] = useState<ChartRegistryKey>("external");
   const [isPending, startTransition] = useTransition();
 
-  const selectedChart = chartRegistry[chartSelection];
+  const selectedChart: ChartRegistryConfig = chartRegistry[chartSelection];
   const SelectedChart = selectedChart.component;
 
   return (
       <Stack h="100%">
         <ChartSelection
             selection={chartSelection}
-            onSelectionChange={(value) => setChartSelection(value as ChartSelectionType)}
+            onSelectionChange={(value) => setChartSelection(value as ChartRegistryKey)}
             values={availableCharts}
         />
         <Card radius="md" shadow="sm" withBorder style={{flex: 1, minHeight: 0}}>
@@ -51,9 +51,9 @@ const ChartsPanel = ({heatPumpSnapshots, trailingDays}: ChartsPanelProps) => {
             <SelectedChart
                 heatPumpSnapshots={heatPumpSnapshots}
                 series={selectedChart.series}
-                xAxisProps={{
-                  domainTrailingDays: trailingDays,
-                }}
+                xAxisProps={{domainTrailingDays: trailingDays}}
+                yAxisProps={selectedChart.yAxisProps}
+                rightYAxisProps={selectedChart.rightYAxisProps}
             />
           </Box>
         </Card>

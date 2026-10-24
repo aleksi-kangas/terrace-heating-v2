@@ -1,5 +1,8 @@
 import {DateTime} from "luxon";
 
+export const roundingTickLabelFormatter = (value: number) =>
+    Number(value.toFixed(1)).toString();
+
 export const tickLabelFormatter = (epochSeconds: number, isMobile = false) => {
   const dt = DateTime.fromSeconds(epochSeconds);
   if (isMobile) {
